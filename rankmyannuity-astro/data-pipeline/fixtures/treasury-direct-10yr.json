@@ -1,0 +1,30 @@
+{
+  "_comment": "Recorded TreasuryDirect / fiscaldata.treasury.gov response for the 10-Year Treasury Constant Maturity Yield. Used as a CROSS-CHECK against FRED DGS10. If FRED and TreasuryDirect differ by more than 10 basis points on the same date, the pipeline records a conflict in conflicts.md and blocks the run (per Phase 4 brief: 'Do not silently reconcile data').",
+  "_source_url": "https://api.fiscaldata.treasury.gov/services/api/fiscal_service/v2/accounting/od/avg_interest_rates?filter=security_desc:eq:Treasury%20Notes,record_date:eq:2026-04-15",
+  "data": [
+    {
+      "record_date": "2026-04-15",
+      "security_type_desc": "Marketable",
+      "security_desc": "Treasury Notes",
+      "avg_interest_rate_amt": "4.34",
+      "src_line_nbr": "1",
+      "record_fiscal_year": "2026",
+      "record_fiscal_quarter": "3",
+      "record_calendar_year": "2026",
+      "record_calendar_quarter": "2",
+      "record_calendar_month": "04",
+      "record_calendar_day": "15"
+    }
+  ],
+  "meta": {
+    "count": 1,
+    "labels": {
+      "record_date": "Record Date",
+      "avg_interest_rate_amt": "Average Interest Rate Amount"
+    },
+    "dataTypes": {
+      "record_date": "DATE",
+      "avg_interest_rate_amt": "CURRENCY"
+    }
+  }
+}

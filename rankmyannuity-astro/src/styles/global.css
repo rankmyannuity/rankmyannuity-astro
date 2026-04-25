@@ -1,0 +1,74 @@
+/* Phase 1-2: Astro scaffold/content tokens (preserved verbatim). */
+/* Phase 3: SPA CSS-variable token set copied verbatim from rankmyannuity/src
+   tailwind.config.js + src/index.css. Do NOT reconcile or "clean up" — the
+   calculator island depends on hsl(var(--…)) lookups against these exact
+   triplet values. T3 parity rule: mirror byte-for-byte. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Phase 1-2 simple tokens — content pages only. */
+:root {
+  --bg: #ffffff;
+  --fg: #0b1220;
+  --muted: #475569;
+  --rule: #e2e8f0;
+}
+html.dark {
+  --bg: #0b1220;
+  --fg: #e2e8f0;
+  --muted: #94a3b8;
+  --rule: #1e293b;
+}
+html { background: var(--bg); color: var(--fg); }
+body { font-family: ui-sans-serif, system-ui, sans-serif; }
+a { color: inherit; text-underline-offset: 3px; }
+
+/* ─── Phase 3: SPA token set (verbatim from rankmyannuity/src/src/index.css) */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted-hsl: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+  }
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted-hsl: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 24 95% 53%;
+    --accent-foreground: 0 0% 100%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+  }
+}
+
+/* Phase 3 DIVERGENCE NOTE — Tailwind token gaps in the SPA source.
+   The calculator components reference these tokens that are NOT defined in
+   the SPA's tailwind.config.js or src/index.css. Under T3 we port byte-for-byte,
+   so the gaps are preserved in the Astro project too. Listed here for audit:
+     - --input, --ring, --popover, --popover-foreground, --destructive,
+       --destructive-foreground
+     - .grade-display, .grade-aplus, .grade-a, .grade-b, .grade-c, .grade-f
+     - .benchmark-bar, .benchmark-bar-fill, .result-animate
+   Confirmed against deployed production CSS (assets/app-DUHA1Zt6.css):
+   none of these classes exist live either. The "oversized green grade
+   indicator" bug on A+/A/B originates from the absence of .grade-display /
+   .grade-* rules — the grade letter renders at the browser default size.
+   DO-NOT-FIX-IN-PHASE-3.
+*/

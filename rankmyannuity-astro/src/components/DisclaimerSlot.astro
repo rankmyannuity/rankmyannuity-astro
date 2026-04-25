@@ -1,0 +1,24 @@
+---
+// Phase 2 placeholder disclaimer. Every article and review renders one of
+// these so the slot is visible in crawled HTML. Final copy lands in the
+// trust-page phase (Phase 2.5 of the migration map) and replaces this file.
+export interface Props {
+  variant?: 'general' | 'yield' | 'ranking' | 'product' | 'carrier';
+}
+const { variant = 'general' } = Astro.props;
+const label: Record<string, string> = {
+  general: 'Educational content — not personalized advice.',
+  yield:   'Rate snapshots can change; see methodology.',
+  ranking: 'Rankings derived from documented IRR methodology.',
+  product: 'Features summarized from issuer materials at the time of writing.',
+  carrier: 'Financial-strength ratings change; see methodology.',
+};
+---
+<aside
+  role="note"
+  data-disclaimer={variant}
+  class="my-6 border-l-2 border-[var(--rule)] pl-4 text-sm text-[var(--muted)]"
+>
+  <strong>Disclosure.</strong> {label[variant]}
+  <span class="block mt-1 text-xs">Final copy lands in the trust-page phase.</span>
+</aside>

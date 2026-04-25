@@ -1,0 +1,83 @@
+{
+  "conflicts": [],
+  "counts": {
+    "benchmarks": 4,
+    "carriers": 11,
+    "products": 12,
+    "rates": 3,
+    "reviews": 23
+  },
+  "diff_vs_previous": {
+    "added": 0,
+    "modified": 0,
+    "previous_snapshot": "/home/user/workspace/rankmyannuity-astro/data-pipeline/snapshots/normalized-2026-04-23T01-20-48-826Z.json",
+    "removed": 0,
+    "threshold_breaches": []
+  },
+  "first_published_run": false,
+  "frozen_time": null,
+  "missing_required": [],
+  "pipeline_version": "0.5.0",
+  "run_id": "2026-04-23T01:54:50.140Z",
+  "run_mode": "refresh",
+  "schema_failures": [],
+  "sources": [
+    {
+      "adapter_id": "curated-yaml",
+      "cached": false,
+      "fetched_at": "2026-04-23T01:54:50.140Z",
+      "http_status": null,
+      "record_count": 3,
+      "sha256": "5371ab9abc08bce43a4a0bd94993c974c3c2c4c9221f8f7ca6a47bc4967e8e65"
+    },
+    {
+      "adapter_id": "curated-yaml",
+      "cached": false,
+      "fetched_at": "2026-04-23T01:54:50.154Z",
+      "http_status": null,
+      "record_count": 1,
+      "sha256": "493d4fc8f104f297516409f20eb75f55c8b9f7a967f8588fd73060504632e6fa"
+    },
+    {
+      "adapter_id": "mdx",
+      "cached": false,
+      "fetched_at": "2026-04-23T01:54:50.155Z",
+      "http_status": null,
+      "record_count": 23,
+      "sha256": "ac176c5ef7b914fbf8705547887081497a02cfdb72346f3327d8328e7ff75dd7"
+    },
+    {
+      "adapter_id": "fred",
+      "cached": true,
+      "fetched_at": "2026-04-23T01:54:50.222Z",
+      "http_status": null,
+      "record_count": 1,
+      "sha256": "5928a958f1d6a506b73afd00f1c98a8dfe64bdfa19641de4b1253d61e75c37c2"
+    },
+    {
+      "adapter_id": "fred",
+      "cached": true,
+      "fetched_at": "2026-04-23T01:54:50.222Z",
+      "http_status": null,
+      "record_count": 1,
+      "sha256": "1014f130b6ecea82ba86e59b4ea544c3bbe0222acc0f7f4ffb9e4a3a09a66b15"
+    },
+    {
+      "adapter_id": "treasury-direct",
+      "cached": true,
+      "fetched_at": "2026-04-23T01:54:50.222Z",
+      "http_status": null,
+      "record_count": 1,
+      "sha256": "2b8582f1dbea3c97e23408d08a2c61408fc9be93815ee92d9075ea108bc97b7b"
+    },
+    {
+      "adapter_id": "fdic-cd",
+      "cached": true,
+      "fetched_at": "2026-04-23T01:54:50.222Z",
+      "http_status": null,
+      "record_count": 1,
+      "sha256": "e4a809eb78c5e474b2fe0ebe000c43ba51419a3ca9e2bb66aeb24fdfea8b3345"
+    }
+  ],
+  "status": "ready_for_review"
+}

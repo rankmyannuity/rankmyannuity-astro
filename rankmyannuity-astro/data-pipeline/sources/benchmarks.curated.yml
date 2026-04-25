@@ -1,0 +1,20 @@
+# Curated benchmark data — values that are either editorial constants or
+# cross-check overrides for API adapters. Only fields NOT sourced from
+# external APIs live here.
+#
+# sp500_historical: the long-run arithmetic mean equity return used in the
+# calculator comparison card. This is an editorial constant — no API provides
+# "the" long-run S&P 500 return, and the value a reasonable reviewer picks
+# depends on the time window. We hold it at 0.10 (10%) consistent with the
+# widely cited long-run historical average of the S&P 500 Total Return Index
+# going back to the 1920s.
+#
+# Per Phase 4 brief: this is exactly the "editorial / curated" bucket. The
+# source_url points to a primary, citable source (NYU Stern's annually
+# updated historical return dataset maintained by Aswath Damodaran — the
+# canonical academic reference for this figure).
+sp500_historical:
+  rate: 0.10
+  source: "NYU Stern — Historical Returns on Stocks, Bonds and Bills (1928–present)"
+  source_url: "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html"
+  as_of: "2026-01-01"

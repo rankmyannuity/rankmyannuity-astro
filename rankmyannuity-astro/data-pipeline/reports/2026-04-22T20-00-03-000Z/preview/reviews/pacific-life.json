@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "pacific-life",
+  "computed_grade": null,
+  "generated_at": "2026-04-22T20:00:03.000Z",
+  "kind": "carrier",
+  "linked_rate": null,
+  "mdx_path": "reviews/pacific-life",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": null,
+  "slug": "pacific-life",
+  "status": "not_live"
+}

@@ -1,0 +1,112 @@
+---
+kind: "carrier"
+title: "New York Life Annuity Review"
+description: "New York Life (NYLIAC) carrier review — wave-1 MYGA rate observations and cross-carrier corpus context as of 2026-04-22."
+publishedAt: 2026-04-22
+updatedAt: 2026-04-22
+author:
+  name: "RankMyAnnuity Editorial"
+  title: "Pilot scaffold"
+tags: ["carrier review", "pilot", "phase-5"]
+carrier:
+  slug: "new-york-life"
+  legalName: "New York Life Insurance and Annuity Corporation"
+  displayName: "New York Life"
+  domicile: "DE"
+  website: "https://www.newyorklife.com"
+sources:
+  - label: "LIMRA — 4Q 2025 Top 20 Annuity Sales Rankings"
+    url: "https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-20-annuity-sales-rankings.pdf"
+    publisher: "LIMRA"
+    accessed: "2026-04-22"
+relatedReviews:
+  - new-york-life-secure-term-myga
+relatedArticles: []
+# [Phase 6.0a-step-4] Lifecycle status — shipping. Promoted from pilot on
+# 2026-04-22 under the Phase 6 first-shipping-promotion arc. The corresponding
+# approval entry lives in data-pipeline/sources/carriers.shipping.yml.
+status: "shipping"
+shipping_criteria:
+  rates_logged: true
+  rates_not_applicable: false
+  products_reviewed: true
+  legal_approved: true
+  compliance_approved: true
+  sme_reviewed: true
+---
+## About this carrier
+
+New York Life Insurance and Annuity Corporation (NYLIAC) is a
+U.S. individual-annuity issuer domiciled in Delaware. In LIMRA's
+Fourth Quarter 2025 Top 20 Annuity Sales Rankings, New York Life
+ranked #2 after Athene, with $30.61 billion in reported total
+individual-annuity sales for the period. [1]
+
+## Rate observations
+
+As of 2026-04-22 observation, New York Life's Secure Term MVA II
+5-year rate at the $100,000+ premium band was 4.60% per the
+carrier's published rate sheet, effective 2026-04-27. [2] On the
+same sheet, as of 2026-04-22 observation, New York Life's Secure
+Term Choice II 5-year rate at the $100,000+ premium band was
+4.50%, effective 2026-04-27. [3] The carrier publishes a
+future-dated sheet — the sheet carries an effective date five
+days after the 2026-04-22 observation window — which is a fact
+about the sheet's publication cadence rather than a prediction
+about the rates it lists.
+
+Both rates sit on a premium band that the carrier caps at
+$1,499,999; NYL discloses that premium amounts of $1.5 million
+or more are handled outside the published band and require
+NYLIAC approval. [2]
+
+## Corpus comparison
+
+Of the three 5-year MYGA rates captured in the Phase 6 corpus,
+we observed Pacific Life's Pacific Harbor published at the
+highest rate — 5.15% at the $200,000+ premium band, effective
+2026-04-16 — as of 2026-04-22 observation. [4] New York Life's
+two 5-year variants (4.60% MVA II and 4.50% Choice II, both at
+the $100,000+ premium band) sit below the Pacific Harbor row on
+the corpus's ranked-by-published-rate axis; the two carriers'
+premium bands differ, so the comparison is a published-rate
+comparison at each carrier's respective disclosed band rather
+than a like-for-like premium-band comparison.
+
+## Product scope
+
+This carrier review covers two New York Life Secure Term
+variants — MVA II and Choice II — both 5-year MYGAs with a
+market-value adjustment allowed per the product frontmatter,
+and both captured on the same carrier rate sheet as of
+2026-04-22 observation. The linked Secure Term MYGA product
+review treats the MVA II and Choice II rate rows as the
+variants of that product family and carries its own
+independently numbered rate citations against the same rate
+sheet. Additional New York Life products are out of scope for
+wave-1 and are not represented in this review.
+
+## Ratings
+
+A.M. Best, S&P, Moody's, and Fitch financial-strength ratings
+are intentionally omitted from the `carrier.ratings` frontmatter
+until an editor confirms the current opinion from each rating
+agency's primary release. The body prose does not restate any
+rating value that is not on a structured field.
+
+## Cited in this review
+
+1. LIMRA, *Fourth Quarter 2025 Top 20 Annuity Sales Rankings*,
+   accessed 2026-04-22. [1]
+2. New York Life Secure Term MVA II 5-year $100k+ rate —
+   nylannuities.com, effective 2026-04-27, observed 2026-04-22. [2]
+3. New York Life Secure Term Choice II 5-year $100k+ rate —
+   nylannuities.com, effective 2026-04-27, observed 2026-04-22. [3]
+4. Pacific Life Pacific Harbor 5-year $200k+ rate —
+   ria.pacificlife.com (Pacific Life Advisory), effective
+   2026-04-16, observed 2026-04-22. [4]
+
+[1]: https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-20-annuity-sales-rankings.pdf
+[2]: https://www.nylannuities.com/resources/rates
+[3]: https://www.nylannuities.com/resources/rates
+[4]: https://ria.pacificlife.com/home/rates.html

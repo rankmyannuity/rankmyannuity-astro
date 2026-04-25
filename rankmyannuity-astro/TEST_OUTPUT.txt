@@ -1,0 +1,21 @@
+
+> rankmyannuity-astro@0.3.0 test
+> vitest run
+
+
+ RUN  v2.1.9 /home/user/workspace/rankmyannuity-astro
+
+stdout | src/lib/calculator/calculatorMath.test.ts > Parity fixtures — calculateResult > F5: grade A+ (IRR was ~15 in fixture; solver returns 19.80, reported)
+[F5] computed IRR=19.7990%, label="Exceptional — top of market", vs="13.90% above top MYGA rate (5.90%)"
+
+stdout | src/lib/calculator/calculatorMath.test.ts > Parity fixtures — calculateResult > F2: report computed label + vs (obscured in fixture)
+[F2] label="Strong — beats most benchmarks", vs="0.43% above top MYGA rate (5.90%)"
+
+ ✓ src/lib/calculator/calculatorMath.test.ts (31 tests) 23ms
+ ✓ src/lib/calculator/deriveSummary.test.ts (9 tests) 4ms
+
+ Test Files  2 passed (2)
+      Tests  40 passed (40)
+   Start at  02:30:12
+   Duration  526ms (transform 144ms, setup 0ms, collect 168ms, tests 27ms, environment 0ms, prepare 108ms)
+

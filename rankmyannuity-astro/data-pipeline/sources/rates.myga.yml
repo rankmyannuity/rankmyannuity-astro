@@ -1,0 +1,193 @@
+# MYGA carrier rates — curated source.
+#
+# Per Phase 4 brief (user, verbatim):
+#   "Keep a maintainer-curated layer for overrides, normalization, exceptions,
+#    editorial notes, and any data that cannot be trusted raw."
+#   "If a field has no reliable source, do not invent or silently backfill it."
+#
+# ─── Phase 5.0d: first seeded real rate ─────────────────────────────────────
+#
+# One entry: New York Life Secure Term MVA II, 5-year, $100k+ band, 4.60%.
+# This is the first real rate in the corpus; it exercises the full normalize
+# path (live top_myga_5yr with source_name + source_url + effective_date)
+# and, together with the 7-day freshness window, lets the /rates and
+# /calculator surfaces render actual MYGA benchmark copy instead of the
+# pilot_empty em-dash.
+#
+# Source diligence (5.0d):
+#   - nylannuities.com/resources/rates is a first-party New York Life
+#     property. Footer/legal copy identifies NYLIAC (New York Life
+#     Insurance and Annuity Corporation) as issuer; the contact section
+#     uses the NYL Annuities TPD service center number/address.
+#   - The page is publicly accessible (no login gate, no advisor-only
+#     disclaimer) as of 2026-04-22.
+#   - Rates displayed are marked "Rates effective as of 4/27/2026" —
+#     the carrier publishes a future-dated sheet. effective_date below
+#     preserves that verbatim; observed_at records when we actually
+#     fetched it (2026-04-22).
+#   - The $100k+ premium band extends to $1,499,999; premiums at or
+#     above $1.5M require NYL approval and are out of scope for the
+#     published band. We therefore encode premium_band_max as
+#     1499999 rather than null ("no upper bound"), matching the NYL
+#     disclosure literally.
+#
+# Wave-1c rename was explicitly DECLINED (Decision 2 — Option a):
+# new-york-life-secure-term-myga stays as the generic product MDX
+# slug; the specific named product ("Secure Term MVA II") and its
+# kebab-case variant slug are captured on the rate entry via
+# product_variant / product_variant_slug.
+#
+# A sibling 5-yr rate exists on the same sheet ("Secure Term Choice II",
+# 4.50% at $100k+). In 5.0d it was explicitly NOT seeded; the 5.0e phase
+# closes that gap — see the second rate entry below.
+#
+# ─── Phase 5.0e: second seeded real rate ────────────────────────────────
+#
+# One additional entry: New York Life Secure Term Choice II, 5-year,
+# $100k+ band, 4.50%. Same carrier, same MDX product family slug, same
+# rate-sheet URL as the 5.0d MVA II seed — this is the "two variants of
+# one product family from one sheet" case that the 5.0d variant-vs-slug
+# resolution pattern was designed for. No MDX rename, no new carrier
+# scaffold; the variant is captured entirely on the rate row.
+#
+# Source diligence (5.0e re-verification on 2026-04-22):
+#   - nylannuities.com/resources/rates still publicly accessible; no
+#     login gate and no advisor-only disclaimer surfaced on re-fetch.
+#   - Choice II 5-year at $100,000+ premium band = 4.50%. Effective
+#     date on the sheet is still 4/27/2026 (same future-dated sheet as
+#     MVA II — NYL publishes both variants on one page).
+#   - Upper-band wording on the sheet: "Please call your representative
+#     for current rates on premium amounts of $1,500,000 or more.
+#     Policies with premium amounts of $1 million or more require
+#     prior NYLIAC approval." This is the same language that governs
+#     MVA II; we encode premium_band_max as 1499999 for consistency,
+#     matching the $1.5M call-rep threshold literally.
+#   - The sibling 3/4/6/7-year Choice II rates on the same sheet are
+#     NOT seeded — 5.0e scope is 5-year only, term generalization is
+#     parked for a later phase.
+#
+# Selection interaction (documented at the seed site so future readers
+# understand why two rates live here without either being "the winner"):
+# The top_myga_5yr benchmark card is emitted by the 5.0e-ratified
+# max-over-fresh selector in data-pipeline/normalize/index.ts. With
+# both rates fresh, MVA II (4.60%) wins the headline and Choice II
+# (4.50%) remains visible in the /rates table only. If MVA II goes
+# stale (observed_at > 7 days old at refresh time) and Choice II stays
+# fresh, the card demotes to Choice II LIVE at 4.50%. If both go
+# stale, the card degrades and preserves the max-of-stale value. See
+# PHASE5E_CHECKLIST.md invariants (i) and (ii).
+#
+# ─── Phase 5.0f: third seeded real rate (first cross-carrier) ───────────
+#
+# One additional entry: Pacific Life Pacific Harbor, 5-year, $200,000+
+# premium band, 5.15%. This is the first non-NYL rate in the corpus;
+# it exercises the cross-carrier selection path end-to-end (max-over-
+# fresh across carriers picks Pacific Harbor 5.15% over NYL MVA II
+# 4.60%, so the top_myga_5yr benchmark card's headline rate AND source
+# citation both transition from NYL to Pacific Life on this publish).
+#
+# Pre-seed blocker surfaced and user-ratified (Option A, 2026-04-22):
+#   Wave-1 product MDX scaffolds are all FIA-typed; no wave-1 carrier
+#   had a pre-existing MYGA product MDX. 5.0f was scope-expanded to
+#   include scaffolding ONE new MYGA product MDX
+#   (pacific-life-pacific-harbor.mdx) alongside this rate seed.
+#   See PHASE5F_CHECKLIST.md "Pre-seed blocker" subsection.
+#
+# Source diligence (5.0f):
+#   - Allianz Life was EXCLUDED on substantive grounds: no MYGA lineup
+#     through independent distribution (FIA-only carrier).
+#   - Corebridge Financial FAILED source-diligence: its MYGA product
+#     (American Pathway Advisory) is RIA-channel-only, its consumer
+#     fixed-annuity page publishes zero MYGA rates, and its retirement-
+#     services interest-rates page explicitly gates current rates
+#     behind an email request ("Please contact IA@corebridgefinancial.com
+#     to request the most current rates"). Email-request gate fails
+#     the "no gate" literal criterion.
+#   - Pacific Life PASSED the literal ratified criteria with an
+#     explicit channel-branding caveat surfaced at the review gate.
+#     The rate sheet at https://ria.pacificlife.com/home/rates.html
+#     is publicly fetchable with no login, no click-through, and no
+#     "for financial professional use only" disclaimer text. BUT the
+#     domain is ria.pacificlife.com ("Pacific Life Advisory"), the
+#     footer document code is FAC2904-RIA-00, and the consumer site
+#     www.pacificlife.com publishes zero MYGA rates. Read A (strict:
+#     RIA-channel branding is disclaimer-in-substance) and Read B
+#     (literal: no login gate, no disclaimer text, rates publicly
+#     fetchable) were both surfaced at the review gate; the user
+#     ratified Option 3 — Read B with explicit caveat documentation.
+#     See PHASE5F_CHECKLIST.md "Source-diligence findings → Pacific
+#     Life" for the full verbatim caveat. The MDX scaffold captures a
+#     compressed 1-2-sentence version in its body "Scope and
+#     availability" section.
+#
+# Rate details on the cited sheet (observed 2026-04-22):
+#   - Product: Pacific Harbor (5-year Initial Guarantee Term)
+#   - $200,000 and above: 5.15%
+#   - Less than $200,000: 4.90%
+#   - Effective date shown on page: "Rates Below are as of 04/16/26"
+#   - Only 3-year and 5-year terms are offered on Pacific Harbor;
+#     the 5-year is what we seed here (5.0f scope is 5-year only).
+#   - State availability: not available in New York (product fact,
+#     not access gate). Captured in the MDX body, not the rate row.
+#
+# Premium band encoding:
+#   - We seed the $200,000+ tier (5.15%), NOT the <$200k tier (4.90%).
+#     Per 5.0f "exactly one" constraint and the ratified preference
+#     for the flagship premium band.
+#   - premium_band_min: 200000.
+#   - premium_band_max: null. The Pacific Life rate sheet does NOT
+#     disclose an upper bound on the $200k+ tier (unlike the NYL sheet,
+#     which explicitly states the $1.5M+ carve-out). Do NOT invent
+#     an upper bound ("no silent backfills" — Phase 4 brief).
+#
+# Cross-carrier selection interaction:
+#   With all three rates fresh (MVA II 4.60%, Choice II 4.50%,
+#   Pacific Harbor 5.15%), the max-over-fresh selector picks Pacific
+#   Harbor as the top_myga_5yr winner across carriers. The benchmark
+#   card renders headline rate 5.15% and source citation references
+#   Pacific Life (Pacific Harbor). This is the first cross-carrier
+#   winner transition in the corpus. The 5.0e-ratified
+#   compareMygaTopRateWinner comparator (rate desc, observed_at desc,
+#   product_variant_slug asc) handles cross-carrier selection without
+#   any carrier-pinning in the rendering path — confirmed by the
+#   5.0f pre-seed carrier-pinning audit (grep scope: src/pages/
+#   rates.astro, src/lib/ui/, data-pipeline/normalize/,
+#   data-pipeline/schemas/; result: CLEAN, only two NYL mentions
+#   found and both were non-runtime docstring examples).
+rates:
+  - carrier_slug: new-york-life
+    product_slug: new-york-life-secure-term-myga
+    product_variant: "Secure Term MVA II"
+    product_variant_slug: secure-term-mva-ii
+    term_years: 5
+    rate: 0.046
+    premium_band_min: 100000
+    premium_band_max: 1499999
+    effective_date: 2026-04-27
+    observed_at: 2026-04-22
+    source_name: "New York Life Secure Term MVA II 5-year $100k+ rate — nylannuities.com, effective 2026-04-27"
+    source_url: "https://www.nylannuities.com/resources/rates"
+  - carrier_slug: new-york-life
+    product_slug: new-york-life-secure-term-myga
+    product_variant: "Secure Term Choice II"
+    product_variant_slug: secure-term-choice-ii
+    term_years: 5
+    rate: 0.045
+    premium_band_min: 100000
+    premium_band_max: 1499999
+    effective_date: 2026-04-27
+    observed_at: 2026-04-22
+    source_name: "New York Life Secure Term Choice II 5-year $100k+ rate — nylannuities.com, effective 2026-04-27"
+    source_url: "https://www.nylannuities.com/resources/rates"
+  - carrier_slug: pacific-life
+    product_slug: pacific-life-pacific-harbor
+    product_variant: "Pacific Harbor"
+    product_variant_slug: pacific-harbor
+    term_years: 5
+    rate: 0.0515
+    premium_band_min: 200000
+    premium_band_max: null
+    effective_date: 2026-04-16
+    observed_at: 2026-04-22
+    source_name: "Pacific Life Pacific Harbor 5-year $200k+ rate — ria.pacificlife.com (Pacific Life Advisory), effective 2026-04-16"
+    source_url: "https://ria.pacificlife.com/home/rates.html"

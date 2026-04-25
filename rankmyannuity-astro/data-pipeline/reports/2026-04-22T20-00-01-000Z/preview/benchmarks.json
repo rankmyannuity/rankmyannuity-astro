@@ -1,0 +1,71 @@
+{
+  "legacy_array": [
+    {
+      "label": "5-yr MYGA (top rate)",
+      "rate": 0.046,
+      "source": "New York Life Secure Term MVA II 5-year $100k+ rate — nylannuities.com, effective 2026-04-27 (2026-04-27)",
+      "status": "live"
+    },
+    {
+      "label": "10-yr Treasury",
+      "rate": 0.0435,
+      "source": "FRED DGS10 (10-Year Treasury CMT) (2026-04-17)",
+      "status": "live"
+    },
+    {
+      "label": "5-yr CD national average",
+      "rate": 0.0185,
+      "source": "FDIC National Rates and Rate Caps (5-year CD, national average) (2026-04-15)",
+      "status": "live"
+    },
+    {
+      "label": "S&P 500 historical avg",
+      "rate": 0.1,
+      "source": "NYU Stern — Historical Returns on Stocks, Bonds and Bills (1928–present) (2026-01-01)",
+      "status": "live"
+    }
+  ],
+  "panel": {
+    "cd_5yr_national_avg": {
+      "adapter_id": "fdic-cd",
+      "as_of": "2026-04-15",
+      "label": "5-yr CD national average",
+      "not_live_cause": null,
+      "rate": 0.0185,
+      "source": "FDIC National Rates and Rate Caps (5-year CD, national average)",
+      "source_url": "https://www.fdic.gov/resources/bankers/national-rates/",
+      "status": "live"
+    },
+    "sp500_historical": {
+      "adapter_id": "curated-yaml",
+      "as_of": "2026-01-01",
+      "label": "S&P 500 historical avg",
+      "not_live_cause": null,
+      "rate": 0.1,
+      "source": "NYU Stern — Historical Returns on Stocks, Bonds and Bills (1928–present)",
+      "source_url": "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html",
+      "status": "live"
+    },
+    "top_myga_5yr": {
+      "adapter_id": "curated-yaml",
+      "as_of": "2026-04-27",
+      "label": "5-yr MYGA (top rate)",
+      "not_live_cause": null,
+      "rate": 0.046,
+      "source": "New York Life Secure Term MVA II 5-year $100k+ rate — nylannuities.com, effective 2026-04-27",
+      "source_url": "https://www.nylannuities.com/resources/rates",
+      "status": "live"
+    },
+    "treasury_10yr": {
+      "adapter_id": "fred",
+      "as_of": "2026-04-17",
+      "label": "10-yr Treasury",
+      "not_live_cause": null,
+      "rate": 0.0435,
+      "source": "FRED DGS10 (10-Year Treasury CMT)",
+      "source_url": "https://fred.stlouisfed.org/series/DGS10",
+      "status": "live"
+    }
+  },
+  "pipeline_version": "0.5.0"
+}

@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "allianz-life",
+  "computed_grade": null,
+  "generated_at": "2026-04-23T01:19:01.891Z",
+  "kind": "product",
+  "linked_rate": null,
+  "mdx_path": "reviews/allianz-benefit-control",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": "allianz-benefit-control",
+  "slug": "allianz-benefit-control",
+  "status": "not_live"
+}

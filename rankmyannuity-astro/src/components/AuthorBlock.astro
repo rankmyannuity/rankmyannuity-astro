@@ -1,0 +1,37 @@
+---
+// Author byline with optional editorial reviewer + published/updated dates.
+// Lives below the H1 on article and review pages.
+export interface Person {
+  name: string;
+  title?: string;
+  url?: string;
+  bio?: string;
+}
+export interface Props {
+  author: Person;
+  reviewer?: Person;
+  publishedAt: Date;
+  updatedAt: Date;
+}
+const { author, reviewer, publishedAt, updatedAt } = Astro.props;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<div class="mt-4 text-sm text-[var(--muted)]" data-author-block>
+  <p>
+    By {author.url ? <a href={author.url}>{author.name}</a> : author.name}
+    {author.title && <span class="ml-1">· {author.title}</span>}
+    {reviewer && (
+      <>
+        <span class="mx-1">·</span>
+        Reviewed by {reviewer.url ? <a href={reviewer.url}>{reviewer.name}</a> : reviewer.name}
+        {reviewer.title && <span class="ml-1">· {reviewer.title}</span>}
+      </>
+    )}
+  </p>
+  <p class="mt-1">
+    Published <time datetime={publishedAt.toISOString()}>{fmt(publishedAt)}</time>
+    <span class="mx-1">·</span>
+    Updated <time datetime={updatedAt.toISOString()}>{fmt(updatedAt)}</time>
+  </p>
+</div>

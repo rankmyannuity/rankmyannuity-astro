@@ -1,0 +1,49 @@
+---
+// /learn — simple index of non-draft articles.
+// Sorted by publishedAt descending so the newest article leads.
+// Richer filtering (tag facets, ranking groupings) is a later-phase concern.
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (
+  await getCollection('learn', (e) =>
+    import.meta.env.PROD ? e.data.draft !== true : true,
+  )
+).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+---
+<BaseLayout
+  title="Learn — Annuity guides and explainers"
+  description="Educational articles on annuity mechanics, rates, and product types. Example content during Phase 2 migration."
+  canonicalPath="/learn"
+>
+  <section class="mx-auto max-w-3xl px-4 py-10">
+    <h1 class="text-3xl font-semibold">Learn</h1>
+    <p class="mt-2 text-sm text-[var(--muted)]">
+      Educational articles. Example content only during the Phase 2 migration.
+    </p>
+    {posts.length === 0 ? (
+      <p class="mt-6 text-[var(--muted)]">No articles yet.</p>
+    ) : (
+      <ul class="mt-6 space-y-5">
+        {posts.map((p) => (
+          <li>
+            <a
+              href={`/learn/${p.data.slug ?? p.slug}`}
+              class="font-semibold"
+            >
+              {p.data.title}
+            </a>
+            <p class="text-sm text-[var(--muted)]">{p.data.description}</p>
+            <p class="text-xs text-[var(--muted)] mt-1">
+              Updated <time datetime={p.data.updatedAt.toISOString()}>
+                {p.data.updatedAt.toISOString().slice(0, 10)}
+              </time>
+            </p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+// [Phase 5] NotLiveChip — small inline badge rendered next to any not-live
+// value (benchmark rate, review grade). The chip label is keyed by the
+// cause and comes from src/lib/ui/liveness.ts (the single source of truth
+// for external copy). The chip carries data-testid="not-live-chip" so
+// tests can assert presence uniformly across surfaces.
+//
+// Usage:
+//   <NotLiveChip label={BENCHMARK_CHIP_LABEL[status]} />
+//   <NotLiveChip label={REVIEW_CHIP_LABEL[cause]} />
+import { NOT_LIVE_CHIP_TESTID } from "../lib/ui/liveness";
+
+interface Props {
+  label: string;
+  // Optional override for the ARIA label; defaults to the visible label.
+  ariaLabel?: string;
+}
+
+const { label, ariaLabel } = Astro.props as Props;
+---
+
+<span
+  class="not-live-chip"
+  data-testid={NOT_LIVE_CHIP_TESTID}
+  role="status"
+  aria-label={ariaLabel ?? label}
+>
+  {label}
+</span>
+
+<style>
+  .not-live-chip {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1rem;
+    color: #92400e;                 /* amber-800 */
+    background-color: #fef3c7;      /* amber-100 */
+    border: 1px solid #fcd34d;      /* amber-300 */
+    border-radius: 9999px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+</style>

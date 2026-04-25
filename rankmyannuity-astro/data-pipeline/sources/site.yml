@@ -1,0 +1,17 @@
+# [Phase 5] Site-level public flags.
+#
+# Controls which site-wide features are exposed to end users. These are
+# editorial/business decisions separate from data health — e.g. the
+# top_myga_5yr benchmark may be live in the pipeline long before we decide
+# to promote it as "top MYGA rate today" in public marketing copy.
+#
+# CI gate (PHASE5_SPEC.md §6, check #4):
+#   top_myga_public: true is only legal if the curated MYGA corpus
+#   contains at least one qualifying 5-year rate (strict definition:
+#   term_years === 5 AND rate > 0). Setting true while the corpus is
+#   empty fails the build.
+#
+# Phase 5.0a default: false. The pilot corpus is empty; we will not
+# expose the benchmark publicly until wave-1 rates land in 5.0b.
+
+top_myga_public: false

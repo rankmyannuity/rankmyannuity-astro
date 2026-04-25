@@ -1,0 +1,84 @@
+---
+kind: "carrier"
+title: "Equitable Financial Annuity Review (Pilot Scaffold)"
+description: "Pilot scaffold for Equitable Financial, a wave-1 carrier in the Phase 5 rollout. Editorial draft pending; no subjective rankings."
+publishedAt: 2026-04-22
+updatedAt: 2026-04-22
+author:
+  name: "RankMyAnnuity Editorial"
+  title: "Pilot scaffold"
+tags: ["carrier review", "pilot", "phase-5"]
+carrier:
+  slug: "equitable-financial"
+  legalName: "Equitable Financial Life Insurance Company"
+  displayName: "Equitable Financial"
+  domicile: "NY"
+  website: "https://equitable.com"
+sources:
+  - label: "LIMRA — 4Q 2025 Top 20 Annuity Sales Rankings"
+    url: "https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-20-annuity-sales-rankings.pdf"
+    publisher: "LIMRA"
+    accessed: "2026-04-22"
+  - label: "LIMRA — 4Q 2025 Top Fixed Annuity Sales Rankings"
+    url: "https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-fixed-annuity-sales-rankings.pdf"
+    publisher: "LIMRA"
+    accessed: "2026-04-22"
+relatedReviews:
+  - equitable-structured-capital-strategies
+relatedArticles: []
+# [Phase 5] Lifecycle status — pilot. Wave-1 scope per PHASE5_KICKOFF.md §4.
+# Shipping promotion requires a separate, explicit approval event.
+status: "pilot"
+---
+> **Editorial draft pending.** This review is a pilot scaffold, not
+> finished editorial. It exists to validate Phase 5 schemas, pipeline
+> wiring, and the not-live surface treatment (noindex + pilot chip).
+> It does not contain subjective rankings, recommendations, or
+> carrier-specific rate data. Numeric product features (caps,
+> participation rates, renewal histories) are intentionally omitted
+> until an editor has reviewed primary sources and signed off.
+
+## About this carrier
+
+Equitable Financial is a U.S. individual-annuity issuer included in the
+first Phase 5 rollout wave after Athene. Wave-1 carriers were
+selected using LIMRA 2025 year-end total individual-annuity sales
+rankings as the objective ordering signal; Equitable Financial's
+rank and reported sales in that table are cited below. [1]
+
+## Scope of this pilot review
+
+- **Status:** pilot (not shipping)
+- **Surfaces:** carrier review renders with `noindex` and the
+  "Pilot — not publicly shipping" chip per PHASE5_SPEC.md §5.
+- **Rates:** no MYGA rate is linked from this review in the Phase
+  5.0b corpus. If a rate later lands in `rates.myga.yml`, the
+  benchmark state changes mechanically — no body edit is implied.
+- **Shipping promotion:** requires a separate, explicit editorial
+  approval event and an entry in `carriers.shipping.yml` with a
+  matching MDX sha256 (PHASE5_SPEC.md §4).
+
+## Product bench captured in this wave
+
+- Equitable Structured Capital Strategies (RILA) — see the linked product review.
+
+Additional products in the carrier's catalog are out of scope for
+wave-1 and will be added in later editorial passes.
+
+## Ratings
+
+A.M. Best / S&P / Moody's ratings are intentionally omitted from
+frontmatter until an editor confirms the current opinion from the
+rating agency's primary source. Do not assume parity with other
+carriers in this wave.
+
+## Sources
+
+1. LIMRA, *Fourth Quarter 2025 Top 20 Annuity Sales Rankings* —
+   Equitable Financial ranked #4 after Athene at
+   $23.16 billion in total individual-annuity sales. [1]
+2. LIMRA, *Fourth Quarter 2025 Top Fixed Annuity Sales Rankings* —
+   referenced for fixed-annuity category context. [2]
+
+[1]: https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-20-annuity-sales-rankings.pdf
+[2]: https://www.limra.com/siteassets/newsroom/fact-tank/sales-data/2025/4q/4q-2025-top-fixed-annuity-sales-rankings.pdf

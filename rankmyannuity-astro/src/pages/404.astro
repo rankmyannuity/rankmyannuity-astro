@@ -1,0 +1,25 @@
+---
+// Real 404. Paired in a later phase with a host-level ErrorDocument rule
+// so unknown routes return an actual 404 status code (this fixes the
+// soft-404 finding from the April 2026 SEO audit — but the host-layer
+// redirect work itself is deferred to the cutover phase).
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Page not found — RankMyAnnuity.pro"
+  description="We couldn't find that page."
+  canonicalPath="/404"
+  noindex={true}
+>
+  <section class="mx-auto max-w-3xl px-4 py-14 text-center">
+    <p class="text-sm text-[var(--muted)]">404</p>
+    <h1 class="text-3xl font-semibold mt-2">We couldn't find that page.</h1>
+    <ul class="mt-6 space-y-2 text-sm">
+      <li><a href="/">Home</a></li>
+      <li><a href="/calculator">Calculator</a></li>
+      <li><a href="/rates">Rates</a></li>
+      <li><a href="/reviews">Reviews</a></li>
+      <li><a href="/learn">Learn</a></li>
+    </ul>
+  </section>
+</BaseLayout>

@@ -1,0 +1,201 @@
+---
+// /calculator — Phase 3.
+//
+// The page is SERVER-RENDERED Astro. The calculator widget is the only
+// interactive region — mounted as a React island via <CalculatorShell
+// client:visible />. Everything else — H1, intro, methodology explainer,
+// FAQ, FAQPage JSON-LD, disclaimer, last-updated date, related Learn
+// links, <noscript> fallback — is real HTML in the static output.
+//
+// T1 bundle isolation: the Income tab ships in the initial island chunk.
+// IndexModeler + recharts + indexData.ts + indexHistory.ts ship in a
+// separate chunk that only loads when the user clicks the Index Modeler
+// tab. Verified by rollup-plugin-visualizer at build time.
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import CalculatorShell from '../components-react/calculator/CalculatorShell.tsx';
+
+const lastUpdated = '2026-04-21';
+const lastUpdatedLabel = 'April 21, 2026';
+
+const faqs = [
+  {
+    q: 'What does the Annuity Grade Calculator actually compute?',
+    a: 'It takes four numbers you already see on any annuity quote — premium, deferral period, monthly payout, and payout duration — and solves for the single fixed annual rate of return that makes those cash flows balance. That implied rate is the comparable number. A quote that promises “$2,100 per month for 20 years on a $200,000 premium” is only impressive if the implied return beats the Treasury or MYGA rates you could get instead.',
+  },
+  {
+    q: 'How is the internal rate of return calculated?',
+    a: 'We use Newton-Raphson iteration on the deferred-annuity present-value formula with monthly compounding (12 periods per year). The solver starts at 4% if the total payout exceeds the premium and at −1% otherwise, converges to a tolerance of 1e-8, caps iterations at 500, and rejects any result where the recomputed present value drifts more than 1% from the premium. Output is displayed as an annualized percentage to two decimals.',
+  },
+  {
+    q: 'How are the letter grades assigned?',
+    a: 'Grades are a fixed function of the implied rate: A+ at 8% or higher, A at 6–8%, B at 4–6%, C at 2–4%, F below 2%. All boundaries are inclusive of the lower bound (≥). A quote at exactly 8.00% grades A+, at 7.99% grades A, and so on. The thresholds are anchored to long-run fixed-income benchmarks — a B grade is roughly parity with top MYGA and CD rates; an A+ is materially above them.',
+  },
+  {
+    q: 'Why does the result show a comparison to a MYGA rate?',
+    a: 'Because the right question is not “is this annuity good” but “is this annuity better than the alternative I could buy today.” We show your implied rate vs the top published 5-year MYGA rate and report the delta in percentage points. A quote that underperforms a liquid MYGA is usually a poor trade regardless of grade.',
+  },
+  {
+    q: 'What assumptions does the Income calculator make?',
+    a: 'Monthly compounding. Level monthly payments for the full payout duration. A single deferral period before payments start. No surrender charges, rider fees, or MVAs applied to the displayed IRR — those should be compared separately. The grade is a rate-of-return grade only and does not evaluate carrier credit, liquidity, or income-rider roll-up mechanics.',
+  },
+  {
+    q: 'How is the Index Modeler different from the Income calculator?',
+    a: 'The Income tab values what a carrier has offered you in writing. The Index Modeler does the opposite — it applies the crediting levers (cap, spread, participation, floor) to 64 real historical index return streams so you can see how an FIA with those terms would have credited across past years. The modeler is backward-looking historical context, not a forecast.',
+  },
+  {
+    q: 'Is the implied rate a guaranteed return?',
+    a: 'No. For a fixed income or SPIA quote with a published payout, the implied rate is the mathematical consequence of the contract you sign — it is as good as the insurer’s promise. For an FIA illustration, the displayed “payout” is itself hypothetical, so the implied rate is hypothetical too. We label it "Hypothetical" in the result card for that reason.',
+  },
+  {
+    q: 'What does the calculator not do?',
+    a: 'It does not personalize to your tax situation. It does not evaluate carrier financial strength. It does not price income-rider benefit bases or step-ups. It does not decide whether you should buy an annuity at all — only whether one specific quote is mathematically competitive with fixed-income alternatives.',
+  },
+  {
+    q: 'Why is there an oversized green indicator on some grades?',
+    a: 'Known UI bug on A+, A, and B grades — the grade-display style is not loaded, so the letter renders at the browser default size. The math behind the grade is correct. Scheduled for a dedicated UI polish pass after Phase 3 parity is verified.',
+  },
+  {
+    q: 'Is this financial advice?',
+    a: 'No. This is an educational comparison tool. Results are hypothetical and do not constitute personalized investment, tax, or legal advice. Speak with a licensed fiduciary before committing premium.',
+  },
+];
+
+// FAQPage JSON-LD schema — emitted as a <script type="application/ld+json">
+// block inside the rendered HTML. Google consumes this to eligible-mark
+// the page for the FAQ rich-result slot.
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const relatedLearn = [
+  { slug: 'cap-rates-explained', title: 'Cap Rates on Fixed Indexed Annuities, Explained' },
+  { slug: 'fia-vs-myga', title: 'FIA vs. MYGA: Which Fixed Annuity Type Fits You?' },
+];
+---
+<BaseLayout
+  title="Annuity Grade Calculator — Implied Rate of Return + Grade"
+  description="Free Annuity Grade Calculator. Enter premium, deferral, monthly payout, and duration — get the implied IRR, a letter grade, and a MYGA/Treasury comparison. No account required."
+  canonicalPath="/calculator"
+>
+  {/* FAQPage JSON-LD for rich results */}
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} slot="head" />
+
+  <section class="mx-auto max-w-4xl px-4 py-10">
+    <h1 class="text-3xl font-semibold">Annuity Grade Calculator</h1>
+    <p class="mt-3 text-[var(--muted)]">
+      Enter the four numbers on your annuity quote and get the implied annual
+      rate of return, a letter grade against fixed-income benchmarks, and a
+      side-by-side comparison to current MYGA and Treasury rates. Nothing is
+      stored. No account required.
+    </p>
+
+    <p class="mt-2 text-xs text-[var(--muted)]">
+      Last updated <time datetime={lastUpdated}>{lastUpdatedLabel}</time>
+    </p>
+
+    {/* Interactive calculator island — the ONLY hydrated region on this page.
+        client:visible defers hydration until the tool scrolls into view,
+        which keeps initial page weight low and preserves a static HTML
+        paint first. */}
+    <div class="my-8">
+      <CalculatorShell client:visible />
+      <noscript>
+        <div class="rounded border border-[var(--rule)] p-6 text-sm text-[var(--muted)]">
+          The interactive calculator requires JavaScript. The explainer, FAQ,
+          and <a href="/methodology">methodology page</a> below describe
+          exactly how the implied rate and grade are computed — you can reach
+          the same answer with a financial calculator or a spreadsheet using
+          the deferred-annuity present-value formula with monthly
+          compounding.
+        </div>
+      </noscript>
+    </div>
+
+    {/* Server-rendered explainer — always in the raw HTML, always crawlable. */}
+    <div class="prose prose-sm max-w-none">
+      <h2 class="text-xl font-semibold mt-10">How this calculator works</h2>
+      <p class="mt-2 text-sm text-[var(--muted)]">
+        Most annuity quotes advertise a monthly payout and a duration. What
+        the buyer actually wants to know is the <em>implied annual rate of
+        return</em> — the single fixed rate that reconciles the lump-sum
+        premium, any deferral period, and the stream of future monthly
+        payments. This tool solves for that rate and assigns it a letter
+        grade.
+      </p>
+
+      <h3 class="text-lg font-semibold mt-6">The IRR calculation, in plain English</h3>
+      <p class="mt-2 text-sm text-[var(--muted)]">
+        The solver uses the deferred-annuity present-value formula with
+        monthly compounding (12 periods per year). Starting from an initial
+        guess of 4% when total lifetime payout exceeds the premium (or −1%
+        when it does not), Newton-Raphson iteration converges the annual
+        rate <em>r</em> at which the present value of all monthly payments
+        — discounted back through the payout period and then through the
+        deferral period — equals the premium. Convergence tolerance is
+        1e-8; the solver caps at 500 iterations and rejects any candidate
+        whose recomputed present value drifts more than 1% from premium.
+      </p>
+
+      <h3 class="text-lg font-semibold mt-6">How grades are derived</h3>
+      <ul class="mt-2 text-sm text-[var(--muted)] list-disc pl-6 space-y-1">
+        <li><strong>A+</strong> — implied rate ≥ 8.00%. Exceptional, top of market.</li>
+        <li><strong>A</strong> — 6.00% ≤ rate &lt; 8.00%. Beats most fixed-income benchmarks.</li>
+        <li><strong>B</strong> — 4.00% ≤ rate &lt; 6.00%. Fair — competitive with CDs/Treasuries.</li>
+        <li><strong>C</strong> — 2.00% ≤ rate &lt; 4.00%. Below average — shop around.</li>
+        <li><strong>F</strong> — rate &lt; 2.00%. Poor — likely a bad deal.</li>
+      </ul>
+      <p class="mt-2 text-sm text-[var(--muted)]">
+        All thresholds are inclusive of the lower bound. Full grading
+        methodology and the benchmark data sources are documented on the
+        <a href="/methodology">methodology page</a>.
+      </p>
+
+      <h3 class="text-lg font-semibold mt-6">Key assumptions and limitations</h3>
+      <ul class="mt-2 text-sm text-[var(--muted)] list-disc pl-6 space-y-1">
+        <li>Monthly compounding; level monthly payments over the full payout duration.</li>
+        <li>A single deferral period before payments begin. Zero deferral = immediate annuity.</li>
+        <li>Surrender charges, rider fees, MVAs, and premium bonuses are <em>not</em> applied to the displayed IRR. Compare them separately.</li>
+        <li>The grade is a rate-of-return grade only. It does not evaluate carrier financial strength, liquidity, or income-rider roll-up mechanics.</li>
+        <li>FIA illustrations are hypothetical. For an FIA, the monthly payout you input is itself a projection; the implied rate inherits that hypothetical status.</li>
+      </ul>
+
+      <h2 class="text-xl font-semibold mt-10">Frequently asked questions</h2>
+      <dl class="mt-4 space-y-6">
+        {faqs.map((f) => (
+          <div>
+            <dt class="font-semibold text-sm">{f.q}</dt>
+            <dd class="mt-1 text-sm text-[var(--muted)]">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+
+      <h2 class="text-xl font-semibold mt-10">Related reading</h2>
+      <ul class="mt-2 text-sm list-disc pl-6 space-y-1">
+        {relatedLearn.map((r) => (
+          <li>
+            <a href={`/learn/${r.slug}`}>{r.title}</a>
+          </li>
+        ))}
+        <li>
+          <a href="/methodology">Methodology — how we rank and grade annuities</a>
+        </li>
+      </ul>
+
+      <div class="mt-10 rounded border border-[var(--rule)] p-4 text-xs text-[var(--muted)]">
+        <strong>Disclaimer.</strong> This calculator is an educational tool.
+        Results are hypothetical illustrations and do not constitute personalized
+        investment, tax, or legal advice. Actual credited interest depends on
+        contract terms, carrier resets, surrender schedules, and future index
+        or rate behavior. Speak with a licensed fiduciary before committing
+        premium.
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,275 @@
+---
+// Dynamic route for /reviews/[slug].
+//
+// Handles both carrier and product reviews via the discriminated union
+// defined in src/content/config.ts. Carrier/product fact objects are
+// inlined on each review entry in Phase 2, so we derive the facts strip
+// right here without needing a separate data collection.
+//
+// Static-only: getStaticPaths is build-time. Drafts are excluded in prod.
+
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import ReviewLayout from '@layouts/ReviewLayout.astro';
+import NotLiveChip from '@components/NotLiveChip.astro';
+import {
+  REVIEW_CHIP_LABEL,
+  isReviewNotLive,
+  reviewGradeString,
+  pageHeaderForReview,
+  type ReviewStatus,
+  type ReviewNotLiveCause,
+  BENCHMARK_VALUE_TESTID,
+} from '@lib/ui/liveness';
+
+// Pipeline-emitted sidecars (Phase 4). Eagerly globbed so the build fails
+// loudly if a sidecar is missing — the data pipeline is expected to emit
+// exactly one sidecar per review MDX. Pages render a "no data" state when
+// the sidecar's pipeline fields are null, they never silently hide.
+type Sidecar = {
+  slug: string;
+  kind: 'carrier' | 'product';
+  mdx_path: string;
+  carrier_slug: string;
+  product_slug: string | null;
+  linked_rate: {
+    term_years: number;
+    rate: number;
+    effective_date: string;
+    source_name: string;
+    source_url: string | null;
+    premium_band_min: number;
+    premium_band_max: number | null;
+  } | null;
+  benchmark_delta: {
+    vs_top_myga_5yr: number;
+    formatted: string;
+  } | null;
+  computed_grade: {
+    rate_used: number;
+    letter: 'A+' | 'A' | 'B' | 'C' | 'F' | 'N/A';
+    grade_class: string;
+    grade_label: string;
+    source_fn: 'calculatorMath.gradeRate';
+  } | null;
+  // [Phase 5] Liveness pair emitted by the pipeline. status==="not_live"
+  // means the review MUST render not-live treatment (em-dash + chip +
+  // noindex) regardless of whether the MDX body looks polished.
+  status: ReviewStatus;
+  not_live_cause: ReviewNotLiveCause | null;
+  generated_at: string;
+  // Pipeline version is enforced as a z.literal on the pipeline side; on the
+  // page side we only need the string to render provenance. Typing this as a
+  // specific literal would force a page-file edit on every pipeline bump.
+  pipeline_version: string;
+};
+const sidecarModules = import.meta.glob<{ default: Sidecar }>(
+  '/src/generated/reviews/*.json',
+  { eager: true },
+);
+const sidecarsBySlug: Record<string, Sidecar> = Object.fromEntries(
+  Object.entries(sidecarModules).map(([path, mod]) => {
+    const slug = path.split('/').pop()!.replace(/\.json$/, '');
+    return [slug, mod.default];
+  }),
+);
+
+export async function getStaticPaths() {
+  const entries = await getCollection('reviews', (e) =>
+    import.meta.env.PROD ? e.data.draft !== true : true,
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug ?? entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<'reviews'> };
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+const d = entry.data;
+const sidecarSlug = d.slug ?? entry.slug;
+const sidecar: Sidecar | undefined = sidecarsBySlug[sidecarSlug];
+
+const pctFromDecimal = (r: number) => `${(r * 100).toFixed(2)}%`;
+const fmtBand = (min: number, max: number | null) => {
+  const nf = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0,
+  });
+  return max === null ? `${nf.format(min)}+` : `${nf.format(min)} – ${nf.format(max)}`;
+};
+
+// Build a flat facts record from the inlined carrier / product fields.
+let facts: Record<string, string | number | undefined> = {};
+if (d.kind === 'carrier') {
+  facts = {
+    'A.M. Best': d.carrier.ratings.amBest,
+    'S&P': d.carrier.ratings.sp,
+    "Moody's": d.carrier.ratings.moodys,
+    'Domicile': d.carrier.domicile,
+  };
+} else {
+  facts = {
+    'Type': d.product.productType,
+    'Surrender': d.product.surrenderYears != null ? `${d.product.surrenderYears}y` : undefined,
+    'Featured cap': d.product.featuredCapRate != null
+      ? `${(d.product.featuredCapRate * 100).toFixed(2)}%`
+      : undefined,
+    'Featured part.': d.product.featuredParticipationRate != null
+      ? `${(d.product.featuredParticipationRate * 100).toFixed(2)}%`
+      : undefined,
+  };
+}
+
+// Resolve related references.
+type RelatedItem = { slug: string; title: string; kind: 'learn' | 'reviews' };
+const related: RelatedItem[] = [];
+for (const ref of d.relatedReviews ?? []) {
+  const r = await getEntry(ref);
+  if (r && r.data.draft !== true)
+    related.push({ slug: r.data.slug ?? r.slug, title: r.data.title, kind: 'reviews' });
+}
+for (const ref of d.relatedArticles ?? []) {
+  const r = await getEntry(ref);
+  if (r && r.data.draft !== true)
+    related.push({ slug: r.data.slug ?? r.slug, title: r.data.title, kind: 'learn' });
+}
+
+const canonicalSlug = d.slug ?? entry.slug;
+
+// [Phase 5] Liveness: prefer the sidecar status (pipeline-derived; reflects
+// sha256 downgrades and benchmark health). If the sidecar is somehow missing
+// — shouldn't happen in a valid build, the pipeline emits one per MDX —
+// default to not_live / pilot_carrier so we fail closed rather than open.
+const reviewStatus: ReviewStatus = sidecar?.status ?? 'not_live';
+const reviewNotLiveCause: ReviewNotLiveCause | null =
+  sidecar?.not_live_cause ?? (sidecar ? null : 'pilot_carrier');
+const reviewIsNotLive = isReviewNotLive(reviewStatus);
+const displayTitle = pageHeaderForReview(d.title, reviewStatus);
+---
+<ReviewLayout
+  kind={d.kind}
+  title={displayTitle}
+  description={d.description}
+  publishedAt={d.publishedAt}
+  updatedAt={d.updatedAt}
+  author={d.author}
+  reviewer={d.reviewer}
+  tags={d.tags}
+  sources={d.sources}
+  related={related}
+  facts={facts}
+  verdict={d.verdict}
+  canonicalPath={`/reviews/${canonicalSlug}`}
+  noindex={reviewIsNotLive}
+>
+  {sidecar && (
+    <section
+      aria-label="Pipeline-computed data"
+      class="rounded border border-[var(--rule)] p-4 my-4 text-sm"
+      data-pipeline-block
+    >
+      <header class="flex items-baseline justify-between gap-3">
+        <h2 class="text-base font-semibold">Pipeline-computed data</h2>
+        <span class="text-xs text-[var(--muted)]">
+          pipeline v{sidecar.pipeline_version}
+          &middot; generated <time datetime={sidecar.generated_at}>{sidecar.generated_at}</time>
+        </span>
+      </header>
+
+      <div class="mt-3 grid gap-4 md:grid-cols-3">
+        <div>
+          <div class="text-xs uppercase tracking-wide text-[var(--muted)]">Linked rate</div>
+          {sidecar.linked_rate ? (
+            <div class="mt-1">
+              <div class="text-lg font-semibold">
+                {pctFromDecimal(sidecar.linked_rate.rate)}
+                <span class="ml-1 text-xs font-normal text-[var(--muted)]">
+                  &middot; {sidecar.linked_rate.term_years}y term
+                </span>
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-0.5">
+                band {fmtBand(sidecar.linked_rate.premium_band_min, sidecar.linked_rate.premium_band_max)}
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-0.5">
+                effective <time datetime={sidecar.linked_rate.effective_date}>{sidecar.linked_rate.effective_date}</time>
+              </div>
+              <div class="text-xs mt-1">
+                {sidecar.linked_rate.source_url ? (
+                  <a href={sidecar.linked_rate.source_url} class="underline text-[var(--muted)]" rel="noopener">
+                    {sidecar.linked_rate.source_name}
+                  </a>
+                ) : (
+                  <span class="text-[var(--muted)]">{sidecar.linked_rate.source_name}</span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div class="mt-1 text-[var(--muted)]">
+              No linked rate in the current corpus.
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div class="text-xs uppercase tracking-wide text-[var(--muted)]">Benchmark delta</div>
+          {sidecar.benchmark_delta ? (
+            <div class="mt-1">
+              <div class="text-lg font-semibold">
+                {pctFromDecimal(sidecar.benchmark_delta.vs_top_myga_5yr)}
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-0.5">
+                {sidecar.benchmark_delta.formatted}
+              </div>
+            </div>
+          ) : (
+            <div class="mt-1 text-[var(--muted)]">
+              No benchmark comparison without a linked rate.
+            </div>
+          )}
+        </div>
+
+        <div>
+          <div class="text-xs uppercase tracking-wide text-[var(--muted)]">Computed grade</div>
+          {/* [Phase 5] Not-live reviews render em-dash + NotLiveChip regardless
+              of whether a computed grade exists. This keeps the UI invariant
+              in PHASE5_SPEC.md §4: a not-live review NEVER shows a grade letter. */}
+          {reviewIsNotLive ? (
+            <div class="mt-1">
+              <div class="text-lg font-semibold" data-testid={BENCHMARK_VALUE_TESTID}>
+                {reviewGradeString(reviewStatus, sidecar.computed_grade?.letter === 'N/A' ? null : (sidecar.computed_grade?.letter ?? null))}
+                {reviewNotLiveCause && (
+                  <NotLiveChip label={REVIEW_CHIP_LABEL[reviewNotLiveCause]} />
+                )}
+              </div>
+            </div>
+          ) : sidecar.computed_grade ? (
+            <div class="mt-1">
+              <div class="text-lg font-semibold" data-testid={BENCHMARK_VALUE_TESTID}>
+                {sidecar.computed_grade.letter}
+                <span class="ml-1 text-xs font-normal text-[var(--muted)]">
+                  &middot; {sidecar.computed_grade.grade_label}
+                </span>
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-0.5">
+                rate used: {pctFromDecimal(sidecar.computed_grade.rate_used)}
+              </div>
+              <div class="text-xs text-[var(--muted)] mt-0.5">
+                source: <code>{sidecar.computed_grade.source_fn}</code>
+              </div>
+            </div>
+          ) : (
+            <div class="mt-1 text-[var(--muted)]">
+              No automated grade available.
+              {d.kind === 'carrier'
+                ? ' Carrier reviews are not graded by the rate pipeline.'
+                : ' The linked rate is missing or this product is out of MYGA scope.'}
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+  <Content />
+</ReviewLayout>

@@ -1,0 +1,28 @@
+# [Phase 5] Allow-list of humans authorized to approve carrier shipping
+# promotions. See PHASE5_SPEC.md §2 and data-pipeline/helpers/reviewersYaml.ts.
+#
+# Each entry:
+#   - id:           stable lowercase kebab-case identifier; matches the
+#                   approved_by field in carriers.shipping.yml
+#   - name:         human-readable; rendered in REVIEW.md approval trail
+#   - active_from:  inclusive YYYY-MM-DD; window opens this date
+#   - active_until: inclusive YYYY-MM-DD, or null for still-active
+#   - notes:        optional free-form (role, team, context)
+#
+# Phase 5.0a default: empty. No one is yet authorized to promote a
+# carrier to shipping status. Adding a reviewer is a deliberate,
+# separate PR that must be reviewed and merged before their id may
+# appear in any shipping approval entry.
+
+reviewers:
+  - id: c-brothersen
+    name: Charlie Brothersen
+    active_from: "2026-04-22"
+    active_until: null
+    notes: >
+      Initial reviewer for wave-1 shipping promotions. Sole
+      operator and sole reviewer during the Phase 6 first-
+      shipping-promotion arc. Additional reviewers may be
+      added in future sub-phases; removals go through
+      active_until rather than deletion per reviewers.yml
+      governance convention.

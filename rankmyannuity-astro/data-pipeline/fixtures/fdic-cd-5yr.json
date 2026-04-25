@@ -1,0 +1,10 @@
+{
+  "_comment": "Recorded FDIC national average response for 5-year CD rates. In production, the FDIC publishes 'National Rates and Rate Caps' weekly. This fixture represents a scraped/exported snapshot. If the live FDIC adapter fails (e.g. 500 error or HTML structure change), the orchestrator falls back to the most recent snapshot under data-pipeline/snapshots/ and records a degraded status \u2014 the run continues, but REVIEW.md flags it.",
+  "_source_url": "https://www.fdic.gov/resources/bankers/national-rates/",
+  "as_of": "2026-04-15",
+  "product": "cd_60_month_national_average",
+  "national_average_pct": 1.85,
+  "non_jumbo_pct": 1.84,
+  "jumbo_pct": 1.86,
+  "_note": "This is the FDIC 'national average' (all FDIC-insured institutions, deposit-weighted). The pipeline uses it as a floor comparison benchmark, not a top-rate quote \u2014 retail MYGA rates substantially exceed this in Phase 4's environment. Value is in percent; adapter converts to decimal (0.0185)."
+}

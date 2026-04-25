@@ -1,0 +1,26 @@
+---
+// Phase 1 placeholder home page. Intentionally thin — real hero, featured
+// tiles, and brand styling come in the content-migration phase.
+import BaseLayout from '@layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="RankMyAnnuity.pro — Astro scaffold"
+  description="Phase 1 scaffold for RankMyAnnuity.pro. Content and calculators are not yet migrated."
+  canonicalPath="/"
+>
+  <section class="mx-auto max-w-3xl px-4 py-14">
+    <h1 class="text-3xl font-semibold">RankMyAnnuity.pro</h1>
+    <p class="mt-3 text-[var(--muted)]">
+      Phase 1 scaffold. Architecture, schemas, and placeholder routes only.
+      Content migration, calculator, and data pipeline land in later phases.
+    </p>
+    <ul class="mt-6 space-y-1 text-sm">
+      <li><a href="/calculator">/calculator</a> — tool placeholder</li>
+      <li><a href="/rates">/rates</a> — tool placeholder</li>
+      <li><a href="/learn">/learn</a> — article index (empty)</li>
+      <li><a href="/reviews">/reviews</a> — review index (empty)</li>
+      <li><a href="/about">/about</a> — trust-page placeholder</li>
+      <li><a href="/methodology">/methodology</a> — trust-page placeholder</li>
+    </ul>
+  </section>
+</BaseLayout>

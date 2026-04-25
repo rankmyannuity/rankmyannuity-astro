@@ -1,0 +1,22 @@
+---
+// Internal breadcrumbs. Server-rendered so crawlers see the hierarchy and
+// so BreadcrumbList schema can be emitted in a later phase.
+export interface Crumb {
+  label: string;
+  href?: string; // omit on the final (current) crumb
+}
+export interface Props {
+  items: Crumb[];
+}
+const { items } = Astro.props;
+---
+<nav aria-label="Breadcrumb" class="text-xs text-[var(--muted)]">
+  <ol class="flex flex-wrap gap-1">
+    {items.map((c, i) => (
+      <li class="flex items-center gap-1">
+        {c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+        {i < items.length - 1 && <span aria-hidden="true">/</span>}
+      </li>
+    ))}
+  </ol>
+</nav>

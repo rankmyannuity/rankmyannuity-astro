@@ -1,0 +1,30 @@
+---
+// Related links — accepts resolved entries from learn and reviews.
+// Callers pass arrays of `{ slug, title }` so this component stays unaware
+// of how references are resolved. That keeps Phase 2 decoupled from any
+// later addition of data collections.
+export interface RelatedItem {
+  slug: string;
+  title: string;
+  kind: 'learn' | 'reviews';
+}
+export interface Props {
+  items?: RelatedItem[];
+}
+const { items = [] } = Astro.props;
+---
+{items.length > 0 && (
+  <section
+    aria-labelledby="related-heading"
+    class="mt-12 border-t border-[var(--rule)] pt-8"
+  >
+    <h2 id="related-heading" class="text-lg font-semibold">Related reading</h2>
+    <ul class="mt-3 grid gap-2 md:grid-cols-2 text-sm">
+      {items.map((i) => (
+        <li>
+          <a href={`/${i.kind}/${i.slug}`}>{i.title}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

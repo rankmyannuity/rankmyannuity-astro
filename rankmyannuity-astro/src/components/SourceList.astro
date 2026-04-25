@@ -1,0 +1,28 @@
+---
+export interface Source {
+  label: string;
+  url: string;
+  publisher?: string;
+  accessed?: Date;
+}
+export interface Props {
+  sources?: Source[];
+}
+const { sources = [] } = Astro.props;
+---
+{sources.length > 0 && (
+  <section aria-labelledby="sources-heading" class="mt-10 text-sm">
+    <h2 id="sources-heading" class="font-semibold">Sources</h2>
+    <ol class="mt-2 list-decimal pl-5 space-y-1 text-[var(--muted)]">
+      {sources.map((s) => (
+        <li>
+          <a href={s.url} rel="nofollow noopener">{s.label}</a>
+          {s.publisher && <span> — {s.publisher}</span>}
+          {s.accessed && (
+            <span> (accessed {s.accessed.toLocaleDateString('en-US')})</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </section>
+)}

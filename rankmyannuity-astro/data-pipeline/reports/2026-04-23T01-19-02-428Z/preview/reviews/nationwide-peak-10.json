@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "nationwide",
+  "computed_grade": null,
+  "generated_at": "2026-04-23T01:19:02.490Z",
+  "kind": "product",
+  "linked_rate": null,
+  "mdx_path": "reviews/nationwide-peak-10",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": "nationwide-peak-10",
+  "slug": "nationwide-peak-10",
+  "status": "not_live"
+}

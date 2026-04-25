@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "new-york-life",
+  "computed_grade": null,
+  "generated_at": "2026-04-22T16:54:42.190Z",
+  "kind": "carrier",
+  "linked_rate": null,
+  "mdx_path": "reviews/new-york-life",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": null,
+  "slug": "new-york-life",
+  "status": "not_live"
+}

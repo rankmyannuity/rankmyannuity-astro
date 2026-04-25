@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "lincoln-financial",
+  "computed_grade": null,
+  "generated_at": "2026-04-23T01:19:29.002Z",
+  "kind": "product",
+  "linked_rate": null,
+  "mdx_path": "reviews/lincoln-optiblend",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": "lincoln-optiblend",
+  "slug": "lincoln-optiblend",
+  "status": "not_live"
+}

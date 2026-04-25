@@ -1,0 +1,23 @@
+{
+  "_comment": "Recorded FRED API response for series DGS1 (1-Year Treasury Constant Maturity Rate). Same schema as DGS10 fixture. Currently only used as a secondary cross-check signal (not rendered on any page in Phase 4), but fetched so the manifest can record it and a future /rates page expansion can consume it without changing the adapter layer.",
+  "_source_url": "https://api.stlouisfed.org/fred/series/observations?series_id=DGS1&api_key=<KEY>&file_type=json&sort_order=desc&limit=5",
+  "realtime_start": "2026-04-21",
+  "realtime_end": "2026-04-21",
+  "observation_start": "1953-04-01",
+  "observation_end": "9999-12-31",
+  "units": "lin",
+  "output_type": 1,
+  "file_type": "json",
+  "order_by": "observation_date",
+  "sort_order": "desc",
+  "count": 5,
+  "offset": 0,
+  "limit": 5,
+  "observations": [
+    { "realtime_start": "2026-04-21", "realtime_end": "2026-04-21", "date": "2026-04-17", "value": "4.78" },
+    { "realtime_start": "2026-04-21", "realtime_end": "2026-04-21", "date": "2026-04-16", "value": "4.76" },
+    { "realtime_start": "2026-04-21", "realtime_end": "2026-04-21", "date": "2026-04-15", "value": "4.77" },
+    { "realtime_start": "2026-04-21", "realtime_end": "2026-04-21", "date": "2026-04-14", "value": "4.75" },
+    { "realtime_start": "2026-04-21", "realtime_end": "2026-04-21", "date": "2026-04-11", "value": "4.74" }
+  ]
+}

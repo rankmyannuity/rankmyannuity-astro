@@ -1,0 +1,22 @@
+---
+// Phase 1 nav skeleton. Server-rendered so internal links appear in the
+// first-pass HTML response. Real nav styling and branding come later.
+const nav = [
+  { href: '/calculator', label: 'Calculator' },
+  { href: '/rates',      label: 'Rates' },
+  { href: '/reviews',    label: 'Reviews' },
+  { href: '/learn',      label: 'Learn' },
+  { href: '/methodology',label: 'Methodology' },
+  { href: '/about',      label: 'About' },
+];
+---
+<header class="border-b border-[var(--rule)]">
+  <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
+    <a href="/" class="font-semibold">RankMyAnnuity.pro</a>
+    <nav aria-label="Primary">
+      <ul class="flex flex-wrap gap-4 text-sm">
+        {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,54 @@
+---
+// Root-level dynamic route for the `pages` content collection.
+//
+// Why `/[slug]` and not `/pages/[slug]`?
+// ---------------------------------------------------
+// Trust / informational pages (/about, /methodology, /privacy, /terms, …)
+// already live at root on the current site, and those URLs must be
+// preserved to keep the existing sitemap addressable. Routing them at
+// `/pages/...` would either require 301s (adds a hop per crawl) or break
+// canonical continuity.
+//
+// Soft-404 safety:
+// ---------------------------------------------------
+// `getStaticPaths` here is NARROWLY scoped — it only emits routes for
+// slugs that exist in the `pages` collection. Astro does NOT make this
+// a catch-all at runtime because `output: 'static'` means unknown paths
+// return the real 404 template. This is intentional and is the fix
+// identified in the April 2026 audit (prior SPA served 200 on every
+// unknown path, creating a soft-404 farm).
+//
+// Static-only: drafts excluded in prod via `import.meta.env.PROD`.
+
+import { getCollection, type CollectionEntry } from 'astro:content';
+import PageLayout from '@layouts/PageLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('pages', (e) =>
+    import.meta.env.PROD ? e.data.draft !== true : true,
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug ?? entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<'pages'> };
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+const canonicalSlug = d.slug ?? entry.slug;
+---
+<PageLayout
+  title={d.title}
+  description={d.description}
+  publishedAt={d.publishedAt}
+  updatedAt={d.updatedAt}
+  author={d.author}
+  canonicalPath={`/${canonicalSlug}`}
+  canonicalOverride={d.canonicalOverride}
+  noindex={d.noindex}
+>
+  <Content />
+</PageLayout>

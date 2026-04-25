@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "corebridge-financial",
+  "computed_grade": null,
+  "generated_at": "2026-04-22T16:54:55.445Z",
+  "kind": "product",
+  "linked_rate": null,
+  "mdx_path": "reviews/corebridge-american-pathway",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": "corebridge-american-pathway",
+  "slug": "corebridge-american-pathway",
+  "status": "not_live"
+}

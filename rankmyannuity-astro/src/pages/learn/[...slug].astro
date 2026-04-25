@@ -1,0 +1,60 @@
+---
+// Dynamic route for /learn/[slug].
+//
+// Static-only: getStaticPaths is evaluated at build time. Drafts are excluded
+// from production builds via `import.meta.env.PROD` so authors can preview
+// drafts in `astro dev` without shipping them to search engines.
+//
+// Related-link references in frontmatter (relatedArticles, relatedReviews)
+// are resolved here into `{ slug, title, kind }` tuples — the layout stays
+// agnostic about how references are resolved.
+
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import ArticleLayout from '@layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('learn', (e) =>
+    import.meta.env.PROD ? e.data.draft !== true : true,
+  );
+  return entries.map((entry) => ({
+    params: { slug: entry.data.slug ?? entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<'learn'> };
+const { entry } = Astro.props as Props;
+const { Content } = await entry.render();
+const d = entry.data;
+
+// Resolve related references into the shape RelatedLinks expects.
+type RelatedItem = { slug: string; title: string; kind: 'learn' | 'reviews' };
+const related: RelatedItem[] = [];
+for (const ref of d.relatedArticles ?? []) {
+  const r = await getEntry(ref);
+  if (r && r.data.draft !== true)
+    related.push({ slug: r.data.slug ?? r.slug, title: r.data.title, kind: 'learn' });
+}
+for (const ref of d.relatedReviews ?? []) {
+  const r = await getEntry(ref);
+  if (r && r.data.draft !== true)
+    related.push({ slug: r.data.slug ?? r.slug, title: r.data.title, kind: 'reviews' });
+}
+
+const canonicalSlug = d.slug ?? entry.slug;
+---
+<ArticleLayout
+  title={d.title}
+  description={d.description}
+  publishedAt={d.publishedAt}
+  updatedAt={d.updatedAt}
+  author={d.author}
+  reviewer={d.reviewer}
+  tags={d.tags}
+  sources={d.sources}
+  related={related}
+  disclaimer={d.disclaimer}
+  canonicalPath={`/learn/${canonicalSlug}`}
+>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,14 @@
+{
+  "benchmark_delta": null,
+  "carrier_slug": "athene",
+  "computed_grade": null,
+  "generated_at": "2026-04-23T01:20:48.911Z",
+  "kind": "product",
+  "linked_rate": null,
+  "mdx_path": "reviews/athene-performance-elite",
+  "not_live_cause": "pilot_carrier",
+  "pipeline_version": "0.5.0",
+  "product_slug": "athene-performance-elite",
+  "slug": "athene-performance-elite",
+  "status": "not_live"
+}

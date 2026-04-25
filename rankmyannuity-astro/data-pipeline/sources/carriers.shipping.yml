@@ -1,0 +1,45 @@
+# [Phase 5] Carrier shipping-promotion approvals.
+#
+# This file is the single source of truth for which carriers have been
+# approved to move from status="pilot" to status="shipping" in their
+# MDX frontmatter. A shipping approval is a deliberate, audited event:
+# PHASE5_SPEC.md §2 requires every shipping carrier to have a matching
+# entry here with a valid reviewer (sources/reviewers.yml) and a pinned
+# sha256 of the MDX bytes at approval time.
+#
+# Each entry:
+#   - carrier_slug:  matches the MDX file slug (kebab-case)
+#   - mdx_path:      repo-relative path to the MDX file
+#   - mdx_sha256:    lowercase hex sha256 of the MDX bytes at approval time
+#   - approved_by:   reviewer id from sources/reviewers.yml, active on approved_at
+#   - approved_at:   YYYY-MM-DD of the approval event
+#   - notes:         optional free-form (PR link, context)
+#
+# CI gates (PHASE5_SPEC.md §6):
+#   #1  A PR setting MDX status="shipping" fails unless a matching entry
+#       exists here.
+#   #3  If the current MDX bytes no longer match mdx_sha256, the normalize
+#       layer downgrades the carrier to pilot and REVIEW.md flags it for
+#       re-approval; CI blocks the PR until either the MDX is restored
+#       or a new approval entry is added.
+#
+# Phase 5.0a default: empty. No carrier is yet approved for shipping.
+# All wave-1 carriers (5.0b) ship as pilot scaffolds.
+
+approvals:
+  - carrier_slug: new-york-life
+    mdx_path: src/content/reviews/new-york-life.mdx
+    mdx_sha256: fa3aecb586aa91e1b0edd075506f8e98e5d9a3c45bee5a05179cb5635279087c
+    approved_by: c-brothersen
+    approved_at: "2026-04-22"
+    notes: >
+      Solo-operator attestation. legal_approved,
+      compliance_approved, and sme_reviewed are attested by
+      the sole operator (c-brothersen) in the absence of
+      separate legal, compliance, or SME roles at the
+      project's current scale. Attestation reflects the
+      operator's good-faith judgment that each criterion
+      has been satisfied under the editorial-constraints
+      document and the standing directives. Separate
+      external sign-offs will supersede these attestations
+      as the project scales.
