@@ -122,13 +122,12 @@ const reviews = defineCollection({
           website: url.optional(),
         }),
         // Editorial verdict / our take, surfaced above the body copy
-        verdict: z.object({
-          grade: z
-            .enum(['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'])
-            .optional(),
+        verdict: z.object(
+          grade: z.string().optional(),
+          gradeStatus: z.enum(['active', 'deferred', 'retired']).default('deferred'),
           bestFor: z.string().optional(),
           watchouts: z.array(z.string()).default([]),
-        }).default({}),
+          }).default({}),
         // [Phase 5] lifecycle status — required
         status: carrierStatus,
         // [Phase 5] required when status === 'shipping' (enforced in outer .superRefine)
@@ -158,9 +157,8 @@ const reviews = defineCollection({
           featuredIndexes: z.array(z.string()).default([]),
         }),
         verdict: z.object({
-          grade: z
-            .enum(['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'])
-            .optional(),
+          grade: z.string().optional()
+            gradeStatus: z.enum(['active', 'deferred', 'retired']).default('deferred'),
           bestFor: z.string().optional(),
           watchouts: z.array(z.string()).default([]),
         }).default({}),
