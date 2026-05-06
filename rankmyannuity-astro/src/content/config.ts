@@ -157,7 +157,7 @@ const reviews = defineCollection({
           featuredIndexes: z.array(z.string()).default([]),
         }),
         verdict: z.object({
-          grade: z.string().optional()
+          grade: z.string().optional(),
             gradeStatus: z.enum(['active', 'deferred', 'retired']).default('deferred'),
           bestFor: z.string().optional(),
           watchouts: z.array(z.string()).default([]),
