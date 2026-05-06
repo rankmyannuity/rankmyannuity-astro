@@ -33,6 +33,7 @@ export interface Props {
   /** Editorial verdict shown prominently above the body */
   verdict?: {
     grade?: string;
+    gradeStatus?: 'active' | 'deferred' | 'retired';
     bestFor?: string;
     watchouts?: string[];
   };
@@ -68,8 +69,8 @@ const crumbs = [
 ];
 
 const factEntries = Object.entries(facts).filter(([, v]) => v !== undefined && v !== '');
-const hasVerdict =
-  !!verdict.grade || !!verdict.bestFor || (verdict.watchouts?.length ?? 0) > 0;
+const gradeVisible = !!verdict.grade && verdict.gradeStatus === 'active';
+const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.length ?? 0) > 0;
 ---
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath} noindex={noindex}>
   <article class="mx-auto max-w-3xl px-4 py-10">
@@ -113,9 +114,9 @@ const hasVerdict =
         aria-label="Editorial verdict"
         class="rounded border border-[var(--rule)] p-4 my-4 text-sm"
       >
-        {verdict.grade && (
-          <p><strong>Grade:</strong> <span class="font-semibold">{verdict.grade}</span></p>
-        )}
+        {verdict.grade && verdict.gradeStatus === 'active' && (
+        <p><strong>Grade:</strong> <span class="font-semibold">{verdict.grade}</span></p>
+        )}}
         {verdict.bestFor && (
           <p class="mt-1"><strong>Best for:</strong> {verdict.bestFor}</p>
         )}
