@@ -122,7 +122,7 @@ const reviews = defineCollection({
           website: url.optional(),
         }),
         // Editorial verdict / our take, surfaced above the body copy
-        verdict: z.object(
+        verdict: z.object({
           grade: z.string().optional(),
           gradeStatus: z.enum(['active', 'deferred', 'retired']).default('deferred'),
           bestFor: z.string().optional(),
