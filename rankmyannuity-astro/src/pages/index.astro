@@ -1,557 +1,370 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const fontSerif = "'DM Serif Display', Georgia, serif";
 ---
 <BaseLayout
   title="RankMyAnnuity — Free Annuity Calculator & FIA Rate Rankings"
   description="Calculate the true implied rate of return on any income annuity and model how caps, spreads, and participation rates affect credited returns across 64 FIA indexes."
   canonicalPath="/"
 >
-  <!-- ============================================================ -->
-  <!-- HERO -->
-  <!-- ============================================================ -->
-  <section class="bg-gradient-to-b from-background to-secondary/30 border-b border-border">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
-      <p class="text-sm font-medium text-accent uppercase tracking-widest mb-4">
-        Free Annuity Analysis Tools
+  <!-- Ensure DM Serif Display + DM Sans are available even if BaseLayout doesn't load them -->
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link slot="head" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" />
+
+  <div style="font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif;color:rgb(2,8,23);background:rgb(255,255,255);">
+
+    <!-- ============================================================ -->
+    <!-- HERO -->
+    <!-- ============================================================ -->
+    <section style="background-image:linear-gradient(to bottom, rgb(255,255,255), rgba(241,245,249,0.5));border-bottom:1px solid rgb(226,232,240);">
+      <div style="max-width:1024px;margin:0 auto;padding:80px 24px;">
+        <p style="font-size:14px;font-weight:500;color:rgb(249,112,21);text-transform:uppercase;letter-spacing:0.16em;margin:0 0 16px;">
+          Free Annuity Analysis Tools
+        </p>
+        <h1 style={`font-family:${fontSerif};font-weight:400;font-size:clamp(2.4rem, 5.2vw, 4rem);line-height:1.05;color:rgb(2,8,23);max-width:760px;margin:0 0 24px;letter-spacing:-0.01em;`}>
+          What is your annuity <span style="font-style:italic;">really</span> paying you?
+        </h1>
+        <p style="font-size:18px;line-height:1.6;color:rgb(71,85,105);max-width:640px;margin:0 0 32px;">
+          Two tools in one: calculate the true implied IRR on any income annuity or pension, and model how cap rates, spreads, and participation rates affect credited returns across 64 FIA indexes — with side-by-side comparison and $100K growth charts.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;">
+          <a href="/calculator" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;background:rgb(15,23,42);color:rgb(248,250,252);font-weight:500;font-size:15px;border:1px solid rgb(15,23,42);text-decoration:none;transition:opacity 0.15s;">
+            Grade My Annuity
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="/how-it-works" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;background:transparent;color:rgb(2,8,23);font-weight:500;font-size:15px;border:1px solid rgb(226,232,240);text-decoration:none;transition:background-color 0.15s;">
+            How It Works
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- STATS STRIP -->
+    <!-- ============================================================ -->
+    <section style="background-color:rgba(241,245,249,0.45);border-bottom:1px solid rgb(226,232,240);">
+      <div style="max-width:1024px;margin:0 auto;padding:36px 24px;display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:24px;">
+        <div>
+          <div style={`font-family:${fontSerif};font-weight:400;font-size:clamp(2rem, 4vw, 2.75rem);color:rgb(2,8,23);line-height:1.1;`}>$400B+</div>
+          <div style="font-size:14px;color:rgb(71,85,105);margin-top:6px;">Annual U.S. annuity sales</div>
+        </div>
+        <div>
+          <div style={`font-family:${fontSerif};font-weight:400;font-size:clamp(2rem, 4vw, 2.75rem);color:rgb(2,8,23);line-height:1.1;`}>64</div>
+          <div style="font-size:14px;color:rgb(71,85,105);margin-top:6px;">FIA indexes modeled with crediting analysis</div>
+        </div>
+        <div>
+          <div style={`font-family:${fontSerif};font-weight:400;font-size:clamp(2rem, 4vw, 2.75rem);color:rgb(2,8,23);line-height:1.1;`}>~60%<sup style="font-size:0.55em;font-weight:400;color:rgb(15,23,42);margin-left:2px;">*</sup></div>
+          <div style="font-size:14px;color:rgb(71,85,105);margin-top:6px;">Buyers who don&rsquo;t know their true yield</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- INCOME & IRR CALCULATOR -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:64px 24px 40px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+        <h2 style={`font-family:${fontSerif};font-weight:400;font-size:28px;color:rgb(2,8,23);margin:0;line-height:1.2;`}>
+          Income &amp; IRR Calculator
+        </h2>
+        <a href="/calculator" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:rgb(15,23,42);text-decoration:none;">
+          Open calculator
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <p style="font-size:15px;line-height:1.6;color:rgb(71,85,105);max-width:680px;margin:12px 0 32px;">
+        The only free tool that solves for the true implied rate of return on any income annuity, deferred annuity, or pension offer — and grades it against current alternatives.
       </p>
-      <h1
-        class="text-foreground mb-6 max-w-2xl"
-        style="font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.1; font-weight: 400;"
-      >
-        What is your annuity <span class="italic">really</span> paying you?
-      </h1>
-      <p class="text-muted-foreground text-lg mb-8 max-w-xl">
-        Two tools in one: calculate the true implied IRR on any income annuity or pension, and model how cap rates, spreads, and participation rates affect credited returns across 64 FIA indexes — with side-by-side comparison and $100K growth charts.
+
+      <div style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:20px;">
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">True Yield — Not Payout Rate</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            That 7% payout rate you&rsquo;re seeing includes return of your own principal. We solve for the real implied IRR so you know what you&rsquo;re actually earning.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">Benchmark Against the Market</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            Your result is graded against top MYGAs, 10-yr Treasuries, and 5-yr CDs in real time — so you can see whether your annuity is actually competitive.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">Works for Pensions Too</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            Evaluating a pension buyout or lump sum vs. monthly income? Enter the numbers the same way — the present value math is identical.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">No Sales Agenda</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            We don&rsquo;t sell annuities, earn commissions, or refer leads. The tool exists to help you make a better-informed decision, full stop.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- FIA INDEX PERFORMANCE CALCULATOR -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:40px 24px 64px;border-top:1px solid rgb(241,245,249);">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:24px;">
+        <h2 style={`font-family:${fontSerif};font-weight:400;font-size:28px;color:rgb(2,8,23);margin:0;line-height:1.2;`}>
+          FIA Index Performance Calculator
+        </h2>
+        <a href="/calculator" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:rgb(15,23,42);text-decoration:none;">
+          Open calculator
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+      <p style="font-size:15px;line-height:1.6;color:rgb(71,85,105);max-width:680px;margin:12px 0 32px;">
+        Fixed Indexed Annuities credit interest based on an index — but caps, spreads, and participation rates mean you rarely capture the full return. Model exactly what you would have received, historically, across 64 indexes.
       </p>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <a
-          href="/calculator"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-        >
-          Grade My Annuity
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </a>
-        <a
-          href="/how-it-works"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-border text-foreground font-medium hover:bg-secondary transition-colors"
-        >
-          How It Works
-        </a>
-      </div>
-    </div>
-  </section>
 
-  <!-- ============================================================ -->
-  <!-- STATS STRIP -->
-  <!-- ============================================================ -->
-  <section class="border-b border-border bg-secondary/20">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div style="display:grid;grid-template-columns:repeat(2, minmax(0, 1fr));gap:20px;">
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">64 Indexes — Searchable</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            From S&amp;P 500 and Nasdaq-100 to proprietary indexes like JPM Mozaic II, Bloomberg Dynamic Balance II, and Goldman Sachs New Horizons. Search by name or issuer instantly.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">Model Any Crediting Method</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            Enter a cap rate, spread, or participation rate and see exactly what would have been credited each year — versus what the index actually returned.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">$100K Growth Chart</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            A visual line chart shows how a $100,000 investment would have grown under the raw index vs. your crediting strategy — making the cost of constraints immediately visible.
+          </p>
+        </div>
+        <div style="padding:24px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);margin-bottom:16px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>
+          </div>
+          <h3 style="font-size:16px;font-weight:600;color:rgb(2,8,23);margin:0 0 8px;">Compare Any Two Strategies</h3>
+          <p style="font-size:14px;line-height:1.65;color:rgb(71,85,105);margin:0;">
+            Put two different indexes and crediting methods side by side. See which would have credited more, and by how much, across the same historical period.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PRODUCT REVIEWS -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:40px 24px 64px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
         <div>
-          <div
-            class="text-foreground"
-            style="font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 400;"
-          >
-            $400B+
-          </div>
-          <div class="text-sm text-muted-foreground mt-1">Annual U.S. annuity sales</div>
+          <h2 style={`font-family:${fontSerif};font-weight:400;font-size:28px;color:rgb(2,8,23);margin:0;line-height:1.2;`}>Product Reviews</h2>
+          <p style="font-size:14px;color:rgb(71,85,105);max-width:560px;margin:8px 0 0;">Independent reviews of the top FIA and variable annuity products from 20 carriers.</p>
         </div>
-        <div>
-          <div
-            class="text-foreground"
-            style="font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 400;"
-          >
-            64
-          </div>
-          <div class="text-sm text-muted-foreground mt-1">FIA indexes modeled with crediting analysis</div>
-        </div>
-        <div>
-          <div
-            class="text-foreground"
-            style="font-family: 'DM Serif Display', Georgia, serif; font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 400;"
-          >
-            ~60%<sup class="text-base align-super">*</sup>
-          </div>
-          <div class="text-sm text-muted-foreground mt-1">Buyers who don&rsquo;t know their true yield</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- INCOME & IRR CALCULATOR -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-16 pb-10">
-    <div class="flex items-end justify-between gap-4 mb-2">
-      <h2
-        class="text-2xl text-foreground"
-        style="font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;"
-      >
-        Income &amp; IRR Calculator
-      </h2>
-      <a href="/calculator" class="text-sm text-primary font-medium inline-flex items-center gap-1 hover:underline whitespace-nowrap">
-        Open calculator
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-    <p class="text-sm text-muted-foreground mb-8 max-w-2xl">
-      The only free tool that solves for the true implied rate of return on any income annuity, deferred annuity, or pension offer — and grades it against current alternatives.
-    </p>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <!-- True Yield (ChartColumn) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column w-5 h-5">
-            <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
-            <path d="M18 17V9"/>
-            <path d="M13 17V5"/>
-            <path d="M8 17v-3"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">True Yield — Not Payout Rate</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          That 7% payout rate you&rsquo;re seeing includes return of your own principal. We solve for the real implied IRR so you know what you&rsquo;re actually earning.
-        </p>
-      </div>
-
-      <!-- Benchmark (TrendingUp) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up w-5 h-5">
-            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
-            <polyline points="16 7 22 7 22 13"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">Benchmark Against the Market</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          Your result is graded against top MYGAs, 10-yr Treasuries, and 5-yr CDs in real time — so you can see whether your annuity is actually competitive.
-        </p>
-      </div>
-
-      <!-- Pensions (ShieldCheck) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check w-5 h-5">
-            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-            <path d="m9 12 2 2 4-4"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">Works for Pensions Too</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          Evaluating a pension buyout or lump sum vs. monthly income? Enter the numbers the same way — the present value math is identical.
-        </p>
-      </div>
-
-      <!-- No Sales Agenda (TriangleAlert) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert w-5 h-5">
-            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
-            <path d="M12 9v4"/>
-            <path d="M12 17h.01"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">No Sales Agenda</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          We don&rsquo;t sell annuities, earn commissions, or refer leads. The tool exists to help you make a better-informed decision, full stop.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- FIA INDEX PERFORMANCE CALCULATOR -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-16">
-    <div class="flex items-end justify-between gap-4 mb-2">
-      <h2
-        class="text-2xl text-foreground"
-        style="font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;"
-      >
-        FIA Index Performance Calculator
-      </h2>
-      <a href="/calculator" class="text-sm text-primary font-medium inline-flex items-center gap-1 hover:underline whitespace-nowrap">
-        Open calculator
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-    <p class="text-sm text-muted-foreground mb-8 max-w-2xl">
-      Fixed Indexed Annuities credit interest based on an index — but caps, spreads, and participation rates mean you rarely capture the full return. Model exactly what you would have received, historically, across 64 indexes.
-    </p>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <!-- 64 Indexes Searchable (Search) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search w-5 h-5">
-            <circle cx="11" cy="11" r="8"/>
-            <path d="m21 21-4.3-4.3"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">64 Indexes — Searchable</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          From S&amp;P 500 and Nasdaq-100 to proprietary indexes like JPM Mozaic II, Bloomberg Dynamic Balance II, and Goldman Sachs New Horizons. Search by name or issuer instantly.
-        </p>
-      </div>
-
-      <!-- Crediting Method (ChartColumn) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column w-5 h-5">
-            <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
-            <path d="M18 17V9"/>
-            <path d="M13 17V5"/>
-            <path d="M8 17v-3"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">Model Any Crediting Method</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          Enter a cap rate, spread, or participation rate and see exactly what would have been credited each year — versus what the index actually returned.
-        </p>
-      </div>
-
-      <!-- $100K Growth Chart (ChartLine) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-line w-5 h-5">
-            <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
-            <path d="m19 9-5 5-4-4-3 3"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">$100K Growth Chart</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          A visual line chart shows how a $100,000 investment would have grown under the raw index vs. your crediting strategy — making the cost of constraints immediately visible.
-        </p>
-      </div>
-
-      <!-- Compare (GitCompare) -->
-      <div class="p-6 rounded-lg border border-border bg-card">
-        <div class="w-9 h-9 rounded-md bg-secondary flex items-center justify-center text-primary mb-4">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-compare w-5 h-5">
-            <circle cx="18" cy="18" r="3"/>
-            <circle cx="6" cy="6" r="3"/>
-            <path d="M13 6h3a2 2 0 0 1 2 2v7"/>
-            <path d="M11 18H8a2 2 0 0 1-2-2V9"/>
-          </svg>
-        </div>
-        <h3 class="font-semibold text-foreground mb-2">Compare Any Two Strategies</h3>
-        <p class="text-sm text-muted-foreground leading-relaxed">
-          Put two different indexes and crediting methods side by side. See which would have credited more, and by how much, across the same historical period.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- PRODUCT REVIEWS -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-16">
-    <div class="flex items-end justify-between gap-4 mb-2">
-      <div>
-        <h2
-          class="text-2xl text-foreground"
-          style="font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;"
-        >
-          Product Reviews
-        </h2>
-        <p class="text-sm text-muted-foreground mt-2 max-w-2xl">
-          Independent reviews of the top FIA and variable annuity products from 20 carriers.
-        </p>
-      </div>
-      <a href="/reviews" class="text-sm text-primary font-medium inline-flex items-center gap-1 hover:underline whitespace-nowrap">
-        All reviews
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-      <!-- GUIDE: Best FIAs -->
-      <a href="/learn/best-fixed-indexed-annuities" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">Guide</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">Best FIAs in 2026</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          Top 10 fixed indexed annuity carriers ranked by sales, ratings, and product quality — with comparison tables.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- GUIDE: Best VAs -->
-      <a href="/learn/best-variable-annuities" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">Guide</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">Best VAs in 2026</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          The leading variable annuity and RILA carriers compared on fees, features, and financial strength.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- GUIDE: FIA vs RILA -->
-      <a href="/learn/fia-vs-rila" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">Guide</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">FIA vs. RILA</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          100% principal protection vs. buffer protection — which annuity type is right for your situation?
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- FIA: Athene -->
-      <a href="/reviews/athene" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">FIA</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">Athene</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          #1 FIA carrier. Apollo-owned. Industry-leading participation rates up to 335%. Full product lineup reviewed.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- VA: Jackson -->
-      <a href="/reviews/jackson" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">VA</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">Jackson National</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          #1 VA carrier. Perspective II has been the top-selling variable annuity for 27+ consecutive quarters.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- NEW: MassMutual -->
-      <a href="/reviews/massmutual" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text w-4 h-4">
-              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-              <path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>
-            </svg>
-          </div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-accent">New</span>
-        </div>
-        <div class="text-sm font-semibold text-foreground">MassMutual</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          A++ rated mutual company — the highest possible AM Best rating. Fixed, indexed, and variable products.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- LEARN -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-10 pb-16">
-    <div class="flex items-end justify-between gap-4 mb-2">
-      <div>
-        <h2
-          class="text-2xl text-foreground"
-          style="font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;"
-        >
-          Learn
-        </h2>
-        <p class="text-sm text-muted-foreground mt-2 max-w-2xl">
-          Guides written by a licensed professional who has reviewed thousands of contracts.
-        </p>
-      </div>
-      <a href="/learn" class="text-sm text-primary font-medium inline-flex items-center gap-1 hover:underline whitespace-nowrap">
-        All articles
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-      <!-- Types of Annuities -->
-      <a href="/learn/types-of-annuities" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-4 h-4">
-            <path d="M12 7v14"/>
-            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
-          </svg>
-        </div>
-        <div class="text-sm font-semibold text-foreground">Types of Annuities Explained</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          Immediate vs. deferred, fixed, FIA, variable, RILA — and how carriers blur the lines.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- What Is a Cap Rate -->
-      <a href="/learn/cap-rates" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-4 h-4">
-            <path d="M12 7v14"/>
-            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
-          </svg>
-        </div>
-        <div class="text-sm font-semibold text-foreground">What Is a Cap Rate?</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          A 10% cap is not a 10% return. The mechanics that actually determine what you earn.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-
-      <!-- How to Read an FIA Illustration -->
-      <a href="/learn/how-to-read-fia-illustration" class="group p-5 rounded-lg border border-border bg-card hover:border-primary/40 transition-all cursor-pointer h-full flex flex-col gap-2">
-        <div class="w-7 h-7 rounded-md bg-secondary flex items-center justify-center text-primary opacity-70">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open w-4 h-4">
-            <path d="M12 7v14"/>
-            <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>
-          </svg>
-        </div>
-        <div class="text-sm font-semibold text-foreground">How to Read an FIA Illustration</div>
-        <div class="text-xs text-muted-foreground leading-relaxed flex-1">
-          What to look for, what to ignore, and the red flags that signal a cherry-picked scenario.
-        </div>
-        <div class="text-xs text-primary font-medium flex items-center gap-1 mt-1">
-          Read
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <!-- ============================================================ -->
-  <!-- BOTTOM CTA -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pb-16">
-    <div class="rounded-xl border border-border bg-card p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-      <div>
-        <h2
-          class="text-xl text-foreground mb-2"
-          style="font-family: 'DM Serif Display', Georgia, serif; font-weight: 400;"
-        >
-          Ready to find out what your annuity is actually worth?
-        </h2>
-        <p class="text-sm text-muted-foreground max-w-md">
-          Both tools are free, require no account, and take under 60 seconds to run.
-        </p>
-      </div>
-      <div class="flex flex-col sm:flex-row gap-3 shrink-0">
-        <a
-          href="/calculator"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
-        >
-          Grade My Annuity
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </a>
-        <a
-          href="/calculator"
-          class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md border border-border text-foreground font-medium hover:bg-secondary transition-colors"
-        >
-          Index Calculator
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
+        <a href="/reviews" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:rgb(15,23,42);white-space:nowrap;text-decoration:none;">
+          All reviews
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
       </div>
-    </div>
-  </section>
 
-  <!-- ============================================================ -->
-  <!-- SOURCE FOOTNOTE -->
-  <!-- ============================================================ -->
-  <section class="max-w-5xl mx-auto px-4 sm:px-6 pb-12">
-    <p class="text-xs text-muted-foreground">
-      * Source: MIT research on 20-year deferred annuity IRR averages. For informational purposes only.
-    </p>
-  </section>
+      <div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:16px;">
+        <a href="/learn/best-fixed-indexed-annuities" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">Guide</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">Best FIAs in 2026</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">Top 10 fixed indexed annuity carriers ranked by sales, ratings, and product quality — with comparison tables.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/learn/best-variable-annuities" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">Guide</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">Best VAs in 2026</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">The leading variable annuity and RILA carriers compared on fees, features, and financial strength.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/learn/fia-vs-rila" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">Guide</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">FIA vs. RILA</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">100% principal protection vs. buffer protection — which annuity type is right for your situation?</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/reviews/athene" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">FIA</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">Athene</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">#1 FIA carrier. Apollo-owned. Industry-leading participation rates up to 335%. Full product lineup reviewed.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/reviews/jackson" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">VA</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">Jackson National</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">#1 VA carrier. Perspective II has been the top-selling variable annuity for 27+ consecutive quarters.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/reviews/massmutual" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
+            </div>
+            <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:rgb(249,112,21);">New</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">MassMutual</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">A++ rated mutual company — the highest possible AM Best rating. Fixed, indexed, and variable products.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- LEARN -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:40px 24px 64px;">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px;">
+        <div>
+          <h2 style={`font-family:${fontSerif};font-weight:400;font-size:28px;color:rgb(2,8,23);margin:0;line-height:1.2;`}>Learn</h2>
+          <p style="font-size:14px;color:rgb(71,85,105);max-width:560px;margin:8px 0 0;">Guides written by a licensed professional who has reviewed thousands of contracts.</p>
+        </div>
+        <a href="/learn" style="display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:500;color:rgb(15,23,42);white-space:nowrap;text-decoration:none;">
+          All articles
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3, minmax(0, 1fr));gap:16px;">
+        <a href="/learn/types-of-annuities" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">Types of Annuities Explained</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">Immediate vs. deferred, fixed, FIA, variable, RILA — and how carriers blur the lines.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/learn/cap-rates" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">What Is a Cap Rate?</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">A 10% cap is not a 10% return. The mechanics that actually determine what you earn.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+
+        <a href="/learn/how-to-read-fia-illustration" style="display:flex;flex-direction:column;gap:8px;padding:20px;border-radius:10px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);height:100%;color:inherit;text-decoration:none;">
+          <div style="width:28px;height:28px;border-radius:6px;background:rgb(241,245,249);display:flex;align-items:center;justify-content:center;color:rgb(15,23,42);opacity:0.7;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">How to Read an FIA Illustration</div>
+          <div style="font-size:12px;line-height:1.6;color:rgb(71,85,105);flex:1;">What to look for, what to ignore, and the red flags that signal a cherry-picked scenario.</div>
+          <div style="font-size:12px;font-weight:500;color:rgb(15,23,42);display:inline-flex;align-items:center;gap:4px;margin-top:4px;">
+            Read
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- BOTTOM CTA -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:0 24px 64px;">
+      <div style="border-radius:14px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);padding:36px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div style="flex:1 1 360px;min-width:0;">
+          <h2 style={`font-family:${fontSerif};font-weight:400;font-size:22px;color:rgb(2,8,23);margin:0 0 8px;line-height:1.25;`}>Ready to find out what your annuity is actually worth?</h2>
+          <p style="font-size:14px;color:rgb(71,85,105);max-width:480px;margin:0;">Both tools are free, require no account, and take under 60 seconds to run.</p>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="/calculator" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;background:rgb(15,23,42);color:rgb(248,250,252);font-weight:500;font-size:15px;border:1px solid rgb(15,23,42);text-decoration:none;">
+            Grade My Annuity
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="/calculator" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;background:transparent;color:rgb(2,8,23);font-weight:500;font-size:15px;border:1px solid rgb(226,232,240);text-decoration:none;">
+            Index Calculator
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SOURCE FOOTNOTE -->
+    <!-- ============================================================ -->
+    <section style="max-width:1024px;margin:0 auto;padding:0 24px 48px;">
+      <p style="font-size:12px;color:rgb(100,116,139);margin:0;">* Source: MIT research on 20-year deferred annuity IRR averages. For informational purposes only.</p>
+    </section>
+
+  </div>
 </BaseLayout>
