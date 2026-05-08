@@ -1,49 +1,300 @@
 ---
-// /learn — simple index of non-draft articles.
-// Sorted by publishedAt descending so the newest article leads.
-// Richer filtering (tag facets, ranking groupings) is a later-phase concern.
-import BaseLayout from '@layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from "../../layouts/BaseLayout.astro";
+// If you have a content collection, you can replace the static array below with:
+//   import { getCollection } from "astro:content";
+//   const articles = await getCollection("learn");
+// Then map each entry to the same { slug, eyebrow, title, description } shape used here.
 
-const posts = (
-  await getCollection('learn', (e) =>
-    import.meta.env.PROD ? e.data.draft !== true : true,
-  )
-).sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-);
+// Foundations: educational guides (matches live rankmyannuity.pro/learn).
+const foundations = [
+  {
+    slug: "types-of-annuities",
+    eyebrow: "Foundations",
+    title: "What Are the Different Kinds of Annuities?",
+    description:
+      "Immediate vs. deferred, fixed, fixed indexed, variable, RILA — and how a single carrier product can resemble all of them at once.",
+  },
+  {
+    slug: "cap-rates",
+    eyebrow: "FIA Mechanics",
+    title: "What Is a Cap Rate and Why Does It Matter?",
+    description:
+      "A 10% cap is not a 10% return. How FIA crediting caps work, why carriers reset them annually, and how to evaluate whether a cap is competitive.",
+  },
+  {
+    slug: "fia-vs-myga",
+    eyebrow: "Product Comparison",
+    title: "FIA vs. MYGA — Which Pays More Over 10 Years?",
+    description:
+      "The structural differences between index-linked and guaranteed returns, and the scenarios where each wins.",
+  },
+  {
+    slug: "best-fia-index-strategies",
+    eyebrow: "Index Analysis",
+    title: "Best FIA Index Strategies — Backtested Crediting Performance",
+    description:
+      "Why index selection matters, what volatility-controlled indexes actually are, and how to run your own backtest.",
+  },
+  {
+    slug: "how-to-read-fia-illustration",
+    eyebrow: "Due Diligence",
+    title: "How to Read an FIA Illustration",
+    description:
+      "What carriers are required to show, what they aren't, and the red flags that signal a cherry-picked scenario.",
+  },
+];
+
+// Editor's Take: editorial analysis (matches live site)
+const editorsTake = [
+  {
+    slug: "new-annuity-products-2026",
+    eyebrow: "Market Analysis",
+    title: "New Annuity Products 2026: An Analytical Exposé",
+    description:
+      "Eight major launches in six months — crypto-linked FIAs, adjustable-income RILAs, hybrid LTC, and locked cap ladders. What each carrier is really doing.",
+  },
+  {
+    slug: "corebridge-equitable-merger",
+    eyebrow: "Industry Analysis",
+    title: "What the Corebridge–Equitable Merger Means for Annuity Buyers",
+    description:
+      "A $22 billion merger creating a $1.5 trillion retirement giant. Impact on existing policyholders and product lines.",
+  },
+  {
+    slug: "carrier-debt-risk",
+    eyebrow: "Risk & Due Diligence",
+    title: "The Debt Beneath Your Annuity: AM Best's Report on Carrier Risk",
+    description:
+      "AM Best reports that life/annuity insurers hold more risky debt than before 2008 with thinner capital buffers.",
+  },
+  {
+    slug: "interest-recapture",
+    eyebrow: "Risk & Due Diligence",
+    title: "FIA Interest Recapture Provisions — What They Mean for Your Returns",
+    description:
+      "Some FIA contracts let carriers take back credited interest under specific circumstances. What to watch for.",
+  },
+  {
+    slug: "market-value-adjustment",
+    eyebrow: "Contract Terms",
+    title: "Market Value Adjustments (MVAs) — The Hidden Cost of Early Surrender",
+    description:
+      "How MVAs work, when they apply, and why your surrender value can differ significantly from your account value.",
+  },
+  {
+    slug: "share-classes",
+    eyebrow: "Compensation",
+    title: "Annuity Share Classes — B, C, L, and Advisory Fee-Based",
+    description:
+      "How different commission structures affect product design, pricing, and whether the product is suitable for you.",
+  },
+  {
+    slug: "fidelity-fpra",
+    eyebrow: "Product Comparison",
+    title: "Fidelity's Personal Retirement Annuity — An Analytical Look",
+    description:
+      "How Fidelity's no-surrender-charge VA compares to traditional variable annuities on cost, fund selection, and flexibility.",
+  },
+  {
+    slug: "volatility-indexes",
+    eyebrow: "Index Analysis",
+    title: "Volatility-Controlled Indexes — Marketing vs. Math",
+    description:
+      "Engineered indexes dominate FIA marketing. How they work, what they sacrifice, and when the complexity is (or isn't) worth it.",
+  },
+  {
+    slug: "renewal-cap-rates",
+    eyebrow: "Rates & Pricing",
+    title: "How Carriers Set and Reset FIA Cap Rates",
+    description:
+      "Why the cap rate you see today probably isn't the cap rate you'll keep. The economics behind renewal rate decisions.",
+  },
+  {
+    slug: "best-fixed-indexed-annuities",
+    eyebrow: "Rankings",
+    title: "Best Fixed Indexed Annuities — An Analytical Ranking",
+    description:
+      "Our framework for evaluating FIAs beyond the surface-level cap rate comparison.",
+  },
+  {
+    slug: "best-variable-annuities",
+    eyebrow: "Rankings",
+    title: "Best Variable Annuities — Fee-Conscious Picks",
+    description:
+      "Variable annuities ranked by total cost, fund selection, and living benefit quality.",
+  },
+  {
+    slug: "fia-vs-rila",
+    eyebrow: "Product Comparison",
+    title: "FIA vs. RILA — Downside Protection Compared",
+    description:
+      "Floor vs. buffer: the structural trade-offs between fixed indexed annuities and registered index-linked annuities.",
+  },
+  {
+    slug: "variable-annuity-fees",
+    eyebrow: "Fee Analysis",
+    title: "Variable Annuity Fees — Every Layer Explained",
+    description:
+      "M&E charges, sub-account fees, rider costs, surrender charges — the full fee stack and what each layer is actually paying for.",
+  },
+  {
+    slug: "best-annuity-retirement-income",
+    eyebrow: "Income Planning",
+    title: "Best Annuities for Retirement Income",
+    description:
+      "How to evaluate income annuities: payout rate, implied IRR, crediting quality, and withdrawal flexibility.",
+  },
+];
+
+// Card markup is reused for both sections.
 ---
+
 <BaseLayout
-  title="Learn — Annuity guides and explainers"
-  description="Educational articles on annuity mechanics, rates, and product types. Example content during Phase 2 migration."
-  canonicalPath="/learn"
+  title="Learn About Annuities | RankMyAnnuity"
+  description="Plain-English guides from a licensed professional who has reviewed thousands of annuity contracts. No sales agenda — just the mechanics you need to evaluate an offer."
 >
-  <section class="mx-auto max-w-3xl px-4 py-10">
-    <h1 class="text-3xl font-semibold">Learn</h1>
-    <p class="mt-2 text-sm text-[var(--muted)]">
-      Educational articles. Example content only during the Phase 2 migration.
+  <article style="max-width:1024px;margin:0 auto;padding:48px 24px 64px 24px;font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;color:rgb(1,8,22);">
+
+    <!-- Hero -->
+    <p style="margin:0 0 8px 0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgb(249,112,21);">Education</p>
+
+    <h1 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:56px;line-height:1.1;letter-spacing:-0.025em;margin:0 0 20px 0;color:rgb(1,8,22);max-width:820px;">
+      Learn About Annuities
+    </h1>
+
+    <p style="font-size:19px;line-height:1.6;color:rgb(51,65,85);margin:0 0 56px 0;max-width:760px;">
+      Plain-English guides from a licensed professional who has reviewed thousands of annuity contracts. No sales agenda — just the mechanics you need to evaluate an offer.
     </p>
-    {posts.length === 0 ? (
-      <p class="mt-6 text-[var(--muted)]">No articles yet.</p>
-    ) : (
-      <ul class="mt-6 space-y-5">
-        {posts.map((p) => (
-          <li>
-            <a
-              href={`/learn/${p.data.slug ?? p.slug}`}
-              class="font-semibold"
-            >
-              {p.data.title}
-            </a>
-            <p class="text-sm text-[var(--muted)]">{p.data.description}</p>
-            <p class="text-xs text-[var(--muted)] mt-1">
-              Updated <time datetime={p.data.updatedAt.toISOString()}>
-                {p.data.updatedAt.toISOString().slice(0, 10)}
-              </time>
+
+    <!-- FOUNDATIONS section -->
+    <section style="margin:0 0 64px 0;">
+      <header style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 24px 0;padding:0 0 12px 0;border-bottom:1px solid rgb(226,232,240);">
+        <div>
+          <h2 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:32px;line-height:1.2;letter-spacing:-0.02em;margin:0 0 4px 0;color:rgb(1,8,22);">
+            Foundations
+          </h2>
+          <p style="margin:0;font-size:14px;color:rgb(100,116,139);">Start here if you're evaluating your first annuity offer.</p>
+        </div>
+      </header>
+
+      <div class="rma-card-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+        {foundations.map((a) => (
+          <a
+            href={`/learn/${a.slug}`}
+            class="rma-card"
+            style="display:flex;flex-direction:column;padding:24px;background:rgb(255,255,255);border:1px solid rgb(226,232,240);border-radius:10px;text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s;"
+          >
+            <p style="margin:0 0 10px 0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgb(249,112,21);">
+              {a.eyebrow}
             </p>
-          </li>
+            <h3 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:22px;line-height:1.3;margin:0 0 10px 0;color:rgb(1,8,22);">
+              {a.title}
+            </h3>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:rgb(51,65,85);flex:1;">
+              {a.description}
+            </p>
+            <span style="font-size:13px;font-weight:500;color:rgb(15,23,42);">Read article →</span>
+          </a>
         ))}
-      </ul>
-    )}
-  </section>
+
+        <!-- Glossary callout in same grid -->
+        <a
+          href="/glossary"
+          class="rma-card rma-card-feature"
+          style="display:flex;flex-direction:column;padding:24px;background:rgb(15,23,42);border:1px solid rgb(15,23,42);border-radius:10px;text-decoration:none;color:rgb(248,250,252);transition:transform .15s,box-shadow .15s;"
+        >
+          <p style="margin:0 0 10px 0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgb(249,112,21);">
+            Reference
+          </p>
+          <h3 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:22px;line-height:1.3;margin:0 0 10px 0;color:rgb(248,250,252);">
+            Annuity Glossary
+          </h3>
+          <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:rgb(203,213,225);flex:1;">
+            Plain-English definitions for 30 annuity and FIA contract terms — from cap rate and GLWB to backtested index data and volatility-controlled indexes.
+          </p>
+          <span style="font-size:13px;font-weight:500;color:rgb(248,250,252);">View glossary →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- EDITOR'S TAKE section -->
+    <section style="margin:0 0 64px 0;">
+      <header style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:0 0 24px 0;padding:0 0 12px 0;border-bottom:1px solid rgb(226,232,240);">
+        <div>
+          <h2 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:32px;line-height:1.2;letter-spacing:-0.02em;margin:0 0 4px 0;color:rgb(1,8,22);">
+            Editor's Take
+          </h2>
+          <p style="margin:0;font-size:14px;color:rgb(100,116,139);">
+            In-depth editorial analysis of the annuity market.
+          </p>
+        </div>
+      </header>
+
+      <div class="rma-card-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
+        {editorsTake.map((a) => (
+          <a
+            href={`/learn/${a.slug}`}
+            class="rma-card"
+            style="display:flex;flex-direction:column;padding:24px;background:rgb(255,255,255);border:1px solid rgb(226,232,240);border-radius:10px;text-decoration:none;transition:border-color .15s,transform .15s,box-shadow .15s;"
+          >
+            <p style="margin:0 0 10px 0;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:rgb(249,112,21);">
+              {a.eyebrow}
+            </p>
+            <h3 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:22px;line-height:1.3;margin:0 0 10px 0;color:rgb(1,8,22);">
+              {a.title}
+            </h3>
+            <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:rgb(51,65,85);flex:1;">
+              {a.description}
+            </p>
+            <span style="font-size:13px;font-weight:500;color:rgb(15,23,42);">Read article →</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA: Ready to put it to work? -->
+    <section style="margin:32px 0 0 0;padding:40px 32px;background:rgb(248,250,252);border:1px solid rgb(226,232,240);border-radius:12px;text-align:center;">
+      <h2 style="font-family:'DM Serif Display', Georgia, serif;font-weight:400;font-size:32px;line-height:1.2;letter-spacing:-0.02em;margin:0 0 8px 0;color:rgb(1,8,22);">
+        Ready to put it to work?
+      </h2>
+      <p style="margin:0 0 24px 0;font-size:15px;color:rgb(100,116,139);">
+        Both calculators are free and require no account.
+      </p>
+      <div style="display:inline-flex;flex-wrap:wrap;gap:12px;justify-content:center;">
+        <a href="/calculator" style="padding:12px 24px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;background:rgb(15,23,42);color:rgb(248,250,252);transition:background-color .15s;">
+          Grade My Annuity
+        </a>
+        <a href="/calculator" style="padding:12px 24px;border-radius:8px;font-size:15px;font-weight:500;text-decoration:none;background:rgb(255,255,255);color:rgb(15,23,42);border:1px solid rgb(226,232,240);transition:border-color .15s;">
+          Index Calculator
+        </a>
+      </div>
+    </section>
+
+  </article>
 </BaseLayout>
+
+<style>
+  /* Card hover */
+  .rma-card:hover {
+    border-color: rgb(15, 23, 42) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -8px rgba(15, 23, 42, 0.15);
+  }
+  .rma-card-feature:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px -8px rgba(15, 23, 42, 0.35);
+  }
+  /* CTA buttons */
+  article a[href="/calculator"]:first-of-type:hover {
+    background: rgb(30, 41, 59) !important;
+  }
+  article a[href="/calculator"]:last-of-type:hover {
+    border-color: rgb(15, 23, 42) !important;
+  }
+  /* Mobile: single column */
+  @media (max-width: 720px) {
+    .rma-card-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
