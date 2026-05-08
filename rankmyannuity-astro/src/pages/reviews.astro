@@ -1,0 +1,423 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Annuity Reviews — Carrier Overviews & Product Analysis | RankMyAnnuity";
+const description =
+  "Independent, no-commission reviews of products from the largest annuity carriers in the U.S. Every review is written by a licensed insurance professional with no affiliate relationships.";
+
+const SERIF = "'DM Serif Display', Georgia, serif";
+
+type Product = {
+  grade: string;
+  score: number;
+  pct: number;
+  name: string;
+  angle: string;
+  term: string;
+};
+type Carrier = {
+  name: string;
+  note: string;
+  strength: string; // AM Best
+  products: Product[];
+};
+
+const fia: Carrier[] = [
+  {
+    name: "Athene",
+    note: "Apollo-owned. #1 FIA seller. Competitive rates, PE ownership risk.",
+    strength: "A",
+    products: [
+      { grade: "C", score: 66, pct: 49, name: "AccuMax", angle: "Accumulation FIA", term: "7-10yr" },
+      { grade: "F", score: 63, pct: 10, name: "Accumulator", angle: "Accumulation + optional income", term: "7-10yr" },
+      { grade: "A", score: 68, pct: 87, name: "Agility", angle: "Shorter commitment", term: "5-7yr" },
+      { grade: "D", score: 64, pct: 34, name: "Ascent Pro", angle: "Premium bonus", term: "10-14yr" },
+      { grade: "F", score: 63, pct: 7, name: "Performance Elite", angle: "Income-focused", term: "10yr" },
+    ],
+  },
+  {
+    name: "Allianz",
+    note: "Largest FIA seller by volume. Proprietary Bloomberg indexes. Not PE-owned.",
+    strength: "A+",
+    products: [
+      { grade: "D", score: 64, pct: 31, name: "222 Annuity", angle: "Bonus + income combined", term: "10yr" },
+      { grade: "D", score: 64, pct: 28, name: "Benefit Control", angle: "Flexible income", term: "10yr" },
+      { grade: "B", score: 67, pct: 78, name: "Core Income 7", angle: "Income-focused", term: "7yr" },
+      { grade: "B", score: 67, pct: 75, name: "360 Annuity", angle: "Multi-index accumulation", term: "10yr" },
+      { grade: "A", score: 69, pct: 96, name: "Accumulator Advantage 7", angle: "Pure accumulation", term: "7yr" },
+    ],
+  },
+  {
+    name: "Corebridge Financial",
+    note: "Formerly AIG. Now Brookfield-owned (PE). Strong legacy book.",
+    strength: "A+",
+    products: [
+      { grade: "C", score: 66, pct: 60, name: "American Pathway", angle: "Core accumulation FIA", term: "10yr" },
+      { grade: "C", score: 66, pct: 57, name: "American Pathway Pro", angle: "Enhanced with bonus", term: "10yr" },
+      { grade: "C", score: 66, pct: 54, name: "American Custom", angle: "Customizable index allocation", term: "7-10yr" },
+    ],
+  },
+  {
+    name: "North American (Sammons)",
+    note: "Traditional insurer. NOT PE-owned. Known for rate-lock innovation.",
+    strength: "A+",
+    products: [
+      { grade: "B", score: 67, pct: 72, name: "Guaranteed Allocation", angle: "Rates locked full term", term: "7-10yr" },
+      { grade: "D", score: 64, pct: 25, name: "Secure Horizon", angle: "4-in-1 income rider", term: "10yr" },
+      { grade: "B", score: 67, pct: 69, name: "Performance Choice", angle: "Accumulation-focused", term: "7-10yr" },
+    ],
+  },
+  {
+    name: "American Equity",
+    note: "Recently acquired by Brookfield (PE). Large legacy FIA book.",
+    strength: "A-",
+    products: [
+      { grade: "D", score: 49, pct: 25, name: "AssetShield", angle: "Accumulation FIA", term: "10yr" },
+      { grade: "F", score: 49, pct: 8, name: "IncomeShield", angle: "Income with GLWB", term: "10yr" },
+      { grade: "C", score: 66, pct: 63, name: "RetireEase Choice", angle: "Simplified FIA", term: "5-7yr" },
+    ],
+  },
+  {
+    name: "Nationwide",
+    note: "Mutual company. NOT PE-owned. Strong in both FIA and VA markets.",
+    strength: "A+",
+    products: [
+      { grade: "D", score: 64, pct: 22, name: "New Heights (FIA)", angle: "Competitive caps + optional income", term: "10yr" },
+      { grade: "A", score: 69, pct: 93, name: "Defined Protection (FIA)", angle: "Conservative accumulation", term: "7yr" },
+      { grade: "B", score: 67, pct: 66, name: "Peak 10 (FIA)", angle: "Premium bonus from mutual carrier", term: "10yr" },
+    ],
+  },
+  {
+    name: "F&G (Fidelity & Guaranty)",
+    note: "Owned by Fidelity National Financial. Competitive accumulation products.",
+    strength: "A",
+    products: [
+      { grade: "C", score: 66, pct: 46, name: "Accumulator Plus", angle: "Core accumulation FIA", term: "10yr" },
+      { grade: "C", score: 66, pct: 43, name: "Performance Pro", angle: "Premium bonus FIA", term: "10yr" },
+      { grade: "B", score: 68, pct: 84, name: "Power Accumulator", angle: "Shorter-term accumulation", term: "7yr" },
+    ],
+  },
+  {
+    name: "Global Atlantic",
+    note: "KKR-owned (PE). Income flexibility focus. Premium bonuses up to 14%.",
+    strength: "A",
+    products: [
+      { grade: "D", score: 66, pct: 40, name: "ForeAccumulation", angle: "Premium bonus up to 14%", term: "10yr" },
+      { grade: "B", score: 68, pct: 81, name: "ForeCare", angle: "#1 selling fixed annuity", term: "5-7yr" },
+      { grade: "F", score: 63, pct: 4, name: "Lifetime Income Builder", angle: "Flexible income planning", term: "10yr" },
+    ],
+  },
+  {
+    name: "Security Benefit",
+    note: "Independent Kansas-based insurer. Competitive performance triggers.",
+    strength: "A",
+    products: [
+      { grade: "D", score: 66, pct: 37, name: "Total Value Annuity", angle: "Accumulation with performance trigger", term: "10yr" },
+      { grade: "F", score: 63, pct: 2, name: "Secure Income", angle: "Income-focused with GLWB", term: "10yr" },
+    ],
+  },
+  {
+    name: "Delaware Life",
+    note: "First to offer Nasdaq-100 (QQQ) as an FIA crediting index.",
+    strength: "A-",
+    products: [
+      { grade: "F", score: 64, pct: 19, name: "Retirement Chapters", angle: "Nasdaq-100 index access", term: "7-10yr" },
+      { grade: "F", score: 64, pct: 16, name: "Retirement Chapters Plus", angle: "QQQ + premium bonus", term: "10yr" },
+    ],
+  },
+  {
+    name: "MassMutual",
+    note: "Highest possible AM Best rating. Mutual company. 170+ years. Broad product range.",
+    strength: "A++",
+    products: [
+      { grade: "A", score: 70, pct: 99, name: "Stable Voyage (MYGA)", angle: "Fixed deferred, watch renewal rates", term: "3-5yr" },
+      { grade: "A", score: 68, pct: 90, name: "Index Summit (FIA)", angle: "FIA with 50% buffer — unique hybrid", term: "6yr" },
+    ],
+  },
+  {
+    name: "Transamerica",
+    note: "Aegon subsidiary. 121 years. Low minimums ($1K). All 50 states.",
+    strength: "A+",
+    products: [
+      { grade: "F", score: 63, pct: 13, name: "Income Plus (FIA)", angle: "8% guaranteed income base growth", term: "10yr" },
+    ],
+  },
+];
+
+const va: Carrier[] = [
+  {
+    name: "Jackson National",
+    note: "#1 VA seller for 27+ consecutive quarters. Independent.",
+    strength: "A",
+    products: [
+      { grade: "F", score: 54, pct: 16, name: "Perspective II", angle: "#1 selling VA in the US", term: "7yr" },
+      { grade: "F", score: 54, pct: 9, name: "Elite Access", angle: "Alternative investment subaccounts", term: "7yr" },
+      { grade: "B", score: 58, pct: 78, name: "Perspective Advisory", angle: "Fee-based VA, ~0.20% M&E", term: "None" },
+    ],
+  },
+  {
+    name: "Equitable",
+    note: "Formerly AXA. #1 in structured/RILA annuities.",
+    strength: "A+",
+    products: [
+      { grade: "B", score: 54, pct: 92, name: "Structured Capital Strategies (RILA)", angle: "#1 selling structured annuity", term: "6yr" },
+      { grade: "B", score: 55, pct: 66, name: "Retirement Cornerstone (VA)", angle: "Traditional VA with GLWB", term: "7yr" },
+    ],
+  },
+  {
+    name: "Lincoln Financial",
+    note: "Major multi-line insurer. Strong in both traditional VA and RILA.",
+    strength: "A+",
+    products: [
+      { grade: "B", score: 54, pct: 75, name: "Level Advantage (RILA)", angle: "Buffer annuity, 10-20% protection", term: "6yr" },
+      { grade: "C", score: 55, pct: 59, name: "ChoicePlus Assurance (VA)", angle: "Traditional VA with rider options", term: "7yr" },
+    ],
+  },
+  {
+    name: "TIAA",
+    note: "Highest possible rating. Nonprofit. Education/nonprofit employer plans.",
+    strength: "A++",
+    products: [
+      { grade: "F", score: 53, pct: 3, name: "TIAA Traditional", angle: "Safest annuity product available", term: "Varies" },
+      { grade: "A", score: 59, pct: 91, name: "CREF Accounts", angle: "Ultra-low cost VA subaccounts", term: "None" },
+    ],
+  },
+  {
+    name: "New York Life",
+    note: "Highest possible rating. Mutual company. Most conservative carrier.",
+    strength: "A++",
+    products: [
+      { grade: "C", score: 55, pct: 53, name: "Premier Variable Annuity", angle: "A++ rated traditional VA", term: "7yr" },
+      { grade: "C", score: 55, pct: 47, name: "Retirement Plus", angle: "Simplified VA option", term: "7yr" },
+    ],
+  },
+  {
+    name: "Prudential",
+    note: "Shifting from traditional VA toward RILA/buffer products.",
+    strength: "A+",
+    products: [
+      { grade: "C", score: 54, pct: 58, name: "FlexGuard (RILA)", angle: "Buffer annuity, A+ carrier", term: "6yr" },
+      { grade: "C", score: 55, pct: 41, name: "Defined Income (VA)", angle: "Traditional VA with GLWB", term: "7yr" },
+    ],
+  },
+  {
+    name: "Pacific Life",
+    note: "Mutual holding company. NOT PE-owned. Strong in both VA and FIA.",
+    strength: "A+",
+    products: [
+      { grade: "D", score: 55, pct: 34, name: "Pacific Odyssey (VA)", angle: "Flexible VA with strong subaccounts", term: "7yr" },
+      { grade: "B", score: 59, pct: 84, name: "Pacific Choice (VA)", angle: "Fee-based advisory VA", term: "None" },
+    ],
+  },
+  {
+    name: "Brighthouse Financial",
+    note: "Spun off from MetLife in 2017. Strong in RILA/buffer products.",
+    strength: "A+",
+    products: [
+      { grade: "C", score: 54, pct: 42, name: "Shield Level (RILA)", angle: "Buffer annuity, 10-20% protection", term: "6yr" },
+      { grade: "C", score: 66, pct: 52, name: "SecureKey (FIA)", angle: "True FIA with ReadyPay rider", term: "5-10yr" },
+    ],
+  },
+];
+
+function strengthBadgeStyle(s: string) {
+  if (s.startsWith("A++") || s === "A+") return "color:rgb(5,150,105);background:rgba(5,150,105,0.1);border:1px solid rgba(5,150,105,0.2);";
+  if (s === "A" || s === "A-") return "color:rgb(16,185,129);background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);";
+  return "color:rgb(100,116,139);background:rgba(241,245,249,0.5);border:1px solid rgb(226,232,240);";
+}
+
+function gradeColor(g: string) {
+  if (g === "A" || g === "A+") return "rgb(5,150,105)";
+  if (g === "B") return "rgb(16,185,129)";
+  if (g === "C") return "rgb(100,116,139)";
+  if (g === "D") return "rgb(245,158,11)";
+  if (g === "F") return "rgb(220,38,38)";
+  return "rgb(100,116,139)";
+}
+---
+
+<BaseLayout title={title} description={description}>
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap"
+  />
+
+  <main
+    style="max-width:896px;margin:0 auto;padding:48px 24px;color:rgb(1,8,22);font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif;"
+  >
+    <h1
+      style={`font-family:${SERIF};font-size:clamp(1.8rem, 4vw, 2.5rem);color:rgb(1,8,22);margin:0 0 12px 0;line-height:1.15;`}
+    >
+      Annuity Product Reviews
+    </h1>
+    <p
+      style="color:rgb(100,116,139);font-size:18px;line-height:1.625;margin:0 0 16px 0;max-width:42rem;"
+    >
+      Independent, no-commission reviews of products from the largest annuity
+      carriers in the U.S. Every review is written by a licensed insurance
+      professional with no affiliate relationships or sales incentives.
+    </p>
+    <p
+      style="color:rgb(100,116,139);font-size:14px;line-height:1.625;margin:0 0 12px 0;max-width:42rem;"
+    >
+      Reviews are based on publicly available product data, state regulatory
+      filings, and direct contract analysis. Product features vary by state and
+      are subject to change. These reviews are for informational purposes only.
+    </p>
+    <div
+      style="border-left:2px solid rgba(15,23,42,0.3);padding-left:12px;font-size:12px;color:rgb(100,116,139);max-width:42rem;margin-bottom:40px;line-height:1.65;"
+    >
+      <p style="margin:0 0 8px 0;">
+        Each product shows a <strong style="color:rgba(1,8,22,0.8);font-weight:600;">letter grade</strong>
+        based on its percentile rank within its own family (FIA, RILA, or VA), a
+        <strong style="color:rgba(1,8,22,0.8);font-weight:600;">raw contract score</strong>
+        (the underlying 0–100 numeric score), and
+        <strong style="color:rgba(1,8,22,0.8);font-weight:600;">Carrier Strength</strong>
+        (AM Best financial stability) in the carrier header.
+      </p>
+      <p style="margin:0;">
+        Letter grades compare like-for-like within a product family — a VA with
+        a raw score of 59 can earn a higher grade than an FIA with a raw score
+        of 65 if it ranks better among VAs. Raw scores are comparable across
+        all products.
+        <a href="/methodology" style="color:rgb(15,23,42);text-decoration:underline;">
+          Learn about our methodology →
+        </a>
+      </p>
+    </div>
+
+    {/* FIA SECTION */}
+    <h2
+      style={`font-family:${SERIF};font-size:24px;color:rgb(1,8,22);margin:32px 0 24px 0;`}
+    >
+      Fixed Indexed Annuity (FIA) Reviews
+    </h2>
+    <div style="display:flex;flex-direction:column;gap:32px;margin-bottom:64px;">
+      {
+        fia.map((c) => (
+          <article style="border:1px solid rgb(226,232,240);border-radius:12px;overflow:hidden;background:rgb(255,255,255);">
+            {/* card header */}
+            <div style="background:rgba(241,245,249,0.3);padding:16px 20px;border-bottom:1px solid rgb(226,232,240);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="min-width:0;">
+                  <h3 style={`font-family:${SERIF};font-size:18px;color:rgb(1,8,22);margin:0;font-weight:400;`}>
+                    {c.name}
+                  </h3>
+                  <p style="font-size:12px;color:rgb(100,116,139);margin:4px 0 0 0;line-height:1.5;">
+                    {c.note}
+                  </p>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;">
+                  <span style={`font-size:12px;font-weight:600;padding:4px 8px;border-radius:4px;${strengthBadgeStyle(c.strength)}`}>
+                    Carrier Strength: {c.strength}
+                  </span>
+                  <span style="font-size:10px;color:rgb(100,116,139);">
+                    AM Best · Financial stability
+                  </span>
+                </div>
+              </div>
+            </div>
+            {/* product rows */}
+            <div>
+              {c.products.map((p, idx) => (
+                <a
+                  href="#"
+                  style={`display:flex;align-items:center;justify-content:space-between;padding:12px 20px;text-decoration:none;color:inherit;transition:background-color .15s;${idx > 0 ? "border-top:1px solid rgb(226,232,240);" : ""}`}
+                  class="rma-product-row"
+                >
+                  <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                    <span style={`flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;background:${gradeColor(p.grade)};color:rgb(255,255,255);font-weight:700;font-size:13px;`}>
+                      {p.grade}
+                    </span>
+                    <div style="min-width:0;">
+                      <span style="font-size:14px;font-weight:500;color:rgb(1,8,22);">{p.name}</span>
+                      <span style="font-size:12px;color:rgb(100,116,139);margin-left:8px;">{p.angle}</span>
+                    </div>
+                  </div>
+                  <span style="font-size:12px;color:rgb(100,116,139);flex-shrink:0;margin-left:12px;">
+                    {p.term}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    {/* VA / RILA SECTION */}
+    <h2
+      style={`font-family:${SERIF};font-size:24px;color:rgb(1,8,22);margin:32px 0 24px 0;`}
+    >
+      Variable Annuity & RILA Reviews
+    </h2>
+    <div style="display:flex;flex-direction:column;gap:32px;margin-bottom:32px;">
+      {
+        va.map((c) => (
+          <article style="border:1px solid rgb(226,232,240);border-radius:12px;overflow:hidden;background:rgb(255,255,255);">
+            <div style="background:rgba(241,245,249,0.3);padding:16px 20px;border-bottom:1px solid rgb(226,232,240);">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                <div style="min-width:0;">
+                  <h3 style={`font-family:${SERIF};font-size:18px;color:rgb(1,8,22);margin:0;font-weight:400;`}>
+                    {c.name}
+                  </h3>
+                  <p style="font-size:12px;color:rgb(100,116,139);margin:4px 0 0 0;line-height:1.5;">
+                    {c.note}
+                  </p>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;">
+                  <span style={`font-size:12px;font-weight:600;padding:4px 8px;border-radius:4px;${strengthBadgeStyle(c.strength)}`}>
+                    Carrier Strength: {c.strength}
+                  </span>
+                  <span style="font-size:10px;color:rgb(100,116,139);">
+                    AM Best · Financial stability
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div>
+              {c.products.map((p, idx) => (
+                <a
+                  href="#"
+                  style={`display:flex;align-items:center;justify-content:space-between;padding:12px 20px;text-decoration:none;color:inherit;transition:background-color .15s;${idx > 0 ? "border-top:1px solid rgb(226,232,240);" : ""}`}
+                  class="rma-product-row"
+                >
+                  <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+                    <span style={`flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;background:${gradeColor(p.grade)};color:rgb(255,255,255);font-weight:700;font-size:13px;`}>
+                      {p.grade}
+                    </span>
+                    <div style="min-width:0;">
+                      <span style="font-size:14px;font-weight:500;color:rgb(1,8,22);">{p.name}</span>
+                      <span style="font-size:12px;color:rgb(100,116,139);margin-left:8px;">{p.angle}</span>
+                    </div>
+                  </div>
+                  <span style="font-size:12px;color:rgb(100,116,139);flex-shrink:0;margin-left:12px;">
+                    {p.term}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .rma-product-row:hover {
+    background: rgba(241, 245, 249, 0.4);
+  }
+</style>

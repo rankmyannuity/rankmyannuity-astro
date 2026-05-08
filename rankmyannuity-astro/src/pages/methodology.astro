@@ -1,0 +1,431 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "How It Works — Methodology, Grading & Disclaimers | RankMyAnnuity";
+const description =
+  "The math behind both calculators — and what the numbers actually mean. Independent grading methodology for FIA, RILA, and VA products.";
+
+const SERIF = "'DM Serif Display', Georgia, serif";
+
+const factors = [
+  { weight: "30%", name: "Contract Mechanics", desc: "How the crediting formula, investment options, or guaranteed benefits are designed — and how they interact with costs and limits." },
+  { weight: "20%", name: "Renewal Stability", desc: "Carrier financial strength, guaranteed minimums, and the track record of honoring competitive rates past year one." },
+  { weight: "15%", name: "Surrender Severity", desc: "How long the surrender period lasts, how steep the charges are, and how quickly they decline." },
+  { weight: "15%", name: "Fee Drag", desc: "Total explicit annual costs including insurance charges, rider fees, and subaccount expenses where applicable." },
+  { weight: "10%", name: "Liquidity / Flexibility", desc: "Free withdrawal provisions, waiver features, and the ability to reallocate strategies or subaccounts." },
+  { weight: "10%", name: "Index / Investment Confidence", desc: "Live track record length, index or fund transparency, and how closely real results have tracked historical illustrations." },
+];
+
+const grades = [
+  { g: "A+", range: "≥ 8%", desc: "Exceptional — better than virtually all safe alternatives" },
+  { g: "A", range: "6–8%", desc: "Strong — beats MYGAs and most market alternatives" },
+  { g: "B", range: "4–6%", desc: "Fair — competitive with top CDs and Treasuries" },
+  { g: "C", range: "2–4%", desc: "Below average — you're giving up yield vs. market" },
+  { g: "F", range: "< 2%", desc: "Poor — effectively losing purchasing power to inflation" },
+];
+
+const familyGrades = [
+  { g: "A", pct: "≥ 85th", desc: "Excellent — among the strongest in its product family" },
+  { g: "B", pct: "≥ 65th", desc: "Strong — above-average contract terms within its family" },
+  { g: "C", pct: "≥ 40th", desc: "Average — typical for its product family" },
+  { g: "D", pct: "≥ 20th", desc: "Below average — weaker terms relative to peers" },
+  { g: "F", pct: "Below 20th", desc: "Poor — significant concerns relative to alternatives" },
+];
+
+const limitations = [
+  "The Income / IRR model assumes fixed, level monthly payments. Variable or inflation-adjusted income streams require manual adjustment.",
+  "It doesn't account for mortality risk (the insurance company's longevity guarantee) — which does have real economic value, especially for long deferral periods or lifetime income riders.",
+  "Tax treatment differences (qualified vs. non-qualified) are not factored in.",
+  "Index returns are annual point-to-point. Monthly or other crediting term structures will produce different results.",
+  "Proprietary index returns are approximations based on published carrier illustrations and fact sheets. Actual credited amounts may differ.",
+  "Benchmarks and index data are periodically updated but may not reflect today's exact rates.",
+  "All outputs are hypothetical educational illustrations. This is an analytical tool, not financial advice.",
+];
+
+const para = "color:rgb(100,116,139);font-size:16px;line-height:1.625;margin:0 0 12px 0;";
+const h2 = `font-family:${SERIF};font-size:20px;color:rgb(1,8,22);margin:0 0 12px 0;font-weight:400;`;
+const codeBlock = "background:rgba(241,245,249,0.5);border:1px solid rgb(226,232,240);border-radius:8px;padding:20px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;line-height:1.5;margin:0 0 16px 0;color:rgb(1,8,22);white-space:pre-wrap;";
+const divider = "display:flex;align-items:center;gap:12px;margin:24px 0;";
+const dividerLabel = `font-family:${SERIF};color:rgb(15,23,42);font-size:14px;text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0;`;
+const dividerLine = "height:1px;flex:1;background:rgb(226,232,240);";
+---
+
+<BaseLayout title={title} description={description}>
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap"
+  />
+
+  <main
+    style="max-width:768px;margin:0 auto;padding:48px 24px;color:rgb(1,8,22);font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif;"
+  >
+    <h1
+      style={`font-family:${SERIF};font-size:clamp(1.8rem, 4vw, 2.5rem);color:rgb(1,8,22);margin:0 0 12px 0;line-height:1.15;`}
+    >
+      How It Works
+    </h1>
+    <p style="color:rgb(100,116,139);font-size:18px;line-height:1.625;margin:0 0 40px 0;">
+      The math behind both calculators — and what the numbers actually mean.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:40px;">
+
+      {/* Overview */}
+      <section>
+        <h2 style={h2}>What the calculator does</h2>
+        <p style={para}>
+          RankMyAnnuity's calculator is an educational tool that models how
+          annuity crediting formulas behave under different assumptions and
+          contract terms.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>What the grade measures</h2>
+        <p style={para}>
+          Our grade blends contract mechanics, renewal-rate stability, surrender
+          schedule severity, rider or fee drag, liquidity features, and
+          index-related confidence factors.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Guaranteed vs. hypothetical</h2>
+        <p style={para}>
+          Guaranteed values are shown separately from hypothetical scenarios.
+          Hypothetical outputs are educational illustrations, not predictions of
+          future credited interest.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>How short-history indices are handled</h2>
+        <p style={para}>
+          When an index has less than 10 years of live history, RankMyAnnuity
+          shows the available factual live-history context but does not create
+          its own historical-style illustration from that limited record. Users
+          may instead choose their own assumption to explore how the annuity
+          formula works.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>What the site does not do</h2>
+        <p style={para}>
+          RankMyAnnuity does not provide personalized investment advice, make
+          purchase recommendations, or guarantee future performance.
+        </p>
+      </section>
+
+      {/* DIVIDER: Income / IRR */}
+      <div style={divider}>
+        <div style={dividerLine}></div>
+        <span style={dividerLabel}>Income / IRR Calculator</span>
+        <div style={dividerLine}></div>
+      </div>
+
+      <section>
+        <h2 style={h2}>The "payout rate" problem</h2>
+        <p style={para}>
+          When an insurance agent shows you a "7% payout rate," they're
+          calculating it like this:
+        </p>
+        <pre style={codeBlock}>{`Payout Rate = Annual Income ÷ Premium
+Example: $7,000/yr ÷ $100,000 = 7%`}</pre>
+        <p style={para}>
+          The catch: that $7,000 includes the return of your own principal —
+          it's not all interest. The real question is what annual interest rate
+          makes the math work. That's what this calculator solves for.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>The formula</h2>
+        <p style={para}>
+          We use the standard deferred annuity present value formula:
+        </p>
+        <pre style={codeBlock}>{`PV = PMT × [(1 − (1 + r/k)^(−n×k)) / (r/k)] × (1 + r/k)^(−d×k)`}</pre>
+        <div style="display:grid;grid-template-columns:1fr;gap:8px;margin:12px 0 16px 0;">
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">PV</strong> = your premium</div>
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">PMT</strong> = monthly payout</div>
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">r</strong> = annual rate (what we solve for)</div>
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">k</strong> = 12 (monthly payments)</div>
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">n</strong> = payout duration in years</div>
+          <div style={para}><strong style="color:rgb(1,8,22);font-weight:600;">d</strong> = deferral years</div>
+        </div>
+        <p style={para}>
+          We know PV, PMT, n, k, and d from your inputs. We solve for <em>r</em>
+          iteratively using Newton-Raphson — the same approach used by financial
+          software — to find the rate that makes the equation balance.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>What the grade means</h2>
+        <p style={para}>
+          Once we have the implied rate, we compare it to current market
+          alternatives — MYGAs, Treasuries, and CDs:
+        </p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0 16px 0;">
+          {grades.map(g => (
+            <div style="display:flex;gap:16px;padding:16px;border-radius:8px;border:1px solid rgb(226,232,240);background:rgb(255,255,255);align-items:flex-start;">
+              <div style={`font-family:${SERIF};font-size:24px;font-weight:600;width:48px;flex-shrink:0;color:rgb(15,23,42);`}>{g.g}</div>
+              <div>
+                <div style="font-size:14px;font-weight:500;color:rgb(1,8,22);">{g.range}</div>
+                <div style="font-size:14px;color:rgb(100,116,139);">{g.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style="color:rgb(100,116,139);font-size:14px;font-style:italic;line-height:1.625;margin:0;">
+          This grade reflects our published methodology across contract
+          features, costs, flexibility, and index-related confidence factors. It
+          is not a recommendation.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Works for pensions and buyouts too</h2>
+        <p style={para}>
+          If you're evaluating a pension lump sum vs. monthly benefit, or a
+          buyout offer, the math is identical. Enter the lump sum as the
+          premium, the monthly benefit as the payout, and the expected benefit
+          duration (life expectancy minus current age) as the payout years. The
+          tool will tell you the implied discount rate the pension is
+          effectively offering you.
+        </p>
+      </section>
+
+      {/* DIVIDER: Index Modeler */}
+      <div style={divider}>
+        <div style={dividerLine}></div>
+        <span style={dividerLabel}>Index Crediting Modeler</span>
+        <div style={dividerLine}></div>
+      </div>
+
+      <section>
+        <h2 style={h2}>What a Fixed Indexed Annuity actually credits you</h2>
+        <p style={para}>
+          A Fixed Indexed Annuity (FIA) doesn't invest your money in the
+          market. Instead, the carrier uses your premium to buy options on an
+          index, then credits you a portion of that index's gain each year —
+          subject to limits defined in your contract. If the index falls, you
+          receive 0% for that year (your principal is protected). If it rises,
+          you receive a capped or scaled version of the gain.
+        </p>
+        <p style={para}>
+          The Index Crediting Modeler shows hypothetical scenarios for what
+          would have been credited to your annuity under three different
+          crediting methods, using historical index data.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>The three crediting methods</h2>
+
+        <h3 style={`font-family:${SERIF};font-size:18px;color:rgb(1,8,22);margin:16px 0 8px 0;font-weight:400;`}>Cap Rate</h3>
+        <p style={para}>
+          You receive 100% of the index gain up to a maximum ceiling. Gains
+          above the cap are forfeited to the carrier.
+        </p>
+        <pre style={codeBlock}>{`Credited = min(Index Return, Cap Rate), floored at 0%
+Example: Index +14%, Cap 10%   → Credited 10%
+Example: Index −8%,  Cap 10%   → Credited 0%`}</pre>
+
+        <h3 style={`font-family:${SERIF};font-size:18px;color:rgb(1,8,22);margin:16px 0 8px 0;font-weight:400;`}>Spread / Margin</h3>
+        <p style={para}>
+          The carrier subtracts a fixed percentage from the index return. You
+          keep whatever remains. Unlike a cap, there is no ceiling — if the
+          index returns 30%, you keep 30% minus the spread.
+        </p>
+        <pre style={codeBlock}>{`Credited = max(Index Return − Spread, 0%)
+Example: Index +14%, Spread 3% → Credited 11%
+Example: Index +2%,  Spread 3% → Credited 0%`}</pre>
+
+        <h3 style={`font-family:${SERIF};font-size:18px;color:rgb(1,8,22);margin:16px 0 8px 0;font-weight:400;`}>Participation Rate</h3>
+        <p style={para}>
+          You receive a fixed percentage of the index return — no ceiling, but
+          scaled down. A 60% participation rate means you keep 60% of gains.
+        </p>
+        <pre style={codeBlock}>{`Credited = max(Index Return × Participation Rate, 0%)
+Example: Index +15%, 60% rate  → Credited 9%
+Example: Index −5%,  60% rate  → Credited 0%`}</pre>
+
+        <p style={para}>
+          These methods can also be combined — for example, a 135% participation
+          rate with a 12% cap. The calculator handles all combinations.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>About the indexes</h2>
+        <p style={para}>
+          The calculator includes <strong style="color:rgb(1,8,22);font-weight:600;">64</strong> indexes
+          across seven categories: broad equity (S&amp;P 500, Nasdaq-100, Russell
+          2000, DJIA), international, fixed income, multi-asset, and proprietary
+          volatility-controlled indexes.
+        </p>
+        <p style={para}>
+          Standard indexes like the S&amp;P 500 use actual historical price
+          returns. Proprietary volatility-controlled indexes use published
+          carrier illustrations and fact sheets, which may include backtested
+          data.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>A note on backtested data</h2>
+        <p style={para}>
+          Many proprietary FIA indexes were created after 2015 — and some as
+          recently as 2021 or 2022. To show historical performance, carriers
+          use backtested data — a reconstruction of how the index <em>would
+          have</em> performed if it had existed.
+        </p>
+        <p style={para}>Backtested results should be read with caution for three reasons:</p>
+        <ul style="color:rgb(100,116,139);font-size:16px;line-height:1.625;margin:0 0 12px 0;padding-left:24px;">
+          <li>They are designed with the benefit of hindsight — the methodology was built knowing what the market did.</li>
+          <li>Transaction costs, execution slippage, and liquidity constraints that would have existed in real trading are typically excluded.</li>
+          <li>Live performance of these indexes has historically lagged their backtested performance.</li>
+        </ul>
+        <p style={para}>
+          When a carrier's illustration shows you 10 years of a proprietary
+          index that launched in 2021, you are looking at backtested data, not
+          live results.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Using Compare Indices</h2>
+        <p style={para}>
+          The Compare Indices mode lets you run two strategies side by side
+          with independent index and parameter selections for each. This lets
+          you directly compare, for example, a cap-rate S&amp;P 500 strategy
+          against an uncapped participation-rate strategy.
+        </p>
+      </section>
+
+      {/* DIVIDER: Product Grading */}
+      <div style={divider}>
+        <div style={dividerLine}></div>
+        <span style={dividerLabel}>Product-Specific Grading</span>
+        <div style={dividerLine}></div>
+      </div>
+
+      <section>
+        <h2 style={h2}>Like-for-like comparison</h2>
+        <p style={para}>
+          RankMyAnnuity does not use one universal grading formula for every
+          annuity type. Each major product family — FIA, RILA, and VA — is
+          graded against other products within that same family.
+        </p>
+        <p style={para}>
+          Grades compare like with like. An FIA grade of B means strong for an
+          FIA. A VA grade of B means strong for a VA. Comparing a B-grade FIA
+          to a B-grade VA is not apples-to-apples.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Strategy-level scoring</h2>
+        <p style={para}>
+          For FIA and RILA products, the grade considers the limiter and the
+          index together — not the limiter in isolation. A 10% cap on the S&amp;P
+          500 is scored differently from a 10% cap on a proprietary
+          volatility-controlled index.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>The six scoring factors</h2>
+        <p style={para}>Every product grade blends six independently scored factors:</p>
+        <div style="border:1px solid rgb(226,232,240);border-radius:8px;overflow:hidden;margin:16px 0;">
+          {factors.map((f, i) => (
+            <div style={`display:grid;grid-template-columns:80px 1fr;gap:16px;padding:16px;${i>0 ? "border-top:1px solid rgb(226,232,240);" : ""}align-items:flex-start;`}>
+              <div style={`font-family:${SERIF};font-size:18px;color:rgb(15,23,42);font-weight:600;`}>{f.weight}</div>
+              <div>
+                <div style="font-size:14px;font-weight:600;color:rgb(1,8,22);margin-bottom:4px;">{f.name}</div>
+                <div style="font-size:14px;color:rgb(100,116,139);line-height:1.5;">{f.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p style={para}>
+          Each factor is scored independently and then weighted. Contract
+          mechanics and renewal stability carry the most weight because they
+          most directly determine what you'll actually earn over the life of
+          the contract.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Carrier Strength vs. Product Grade</h2>
+        <p style={para}>
+          Every product review shows two separate ratings. These measure
+          fundamentally different things:
+        </p>
+        <p style={para}>
+          <strong style="color:rgb(1,8,22);font-weight:600;">Carrier Strength (AM Best rating).</strong>
+          This reflects the insurance company's financial stability and ability
+          to pay claims. An A+ rating means the carrier has exceptional
+          financial strength. This is not a rating of the product — it's a
+          rating of the company behind it.
+        </p>
+        <p style={para}>
+          <strong style="color:rgb(1,8,22);font-weight:600;">Product Grade (contract competitiveness).</strong>
+          This compares the specific annuity contract against other products in
+          its own family. An FIA is graded against other FIAs — not against VAs
+          or MYGAs.
+        </p>
+        <p style={para}>
+          A carrier rated A+ for financial strength might offer some products
+          that grade as A and others that grade as D. The ratings are
+          independent.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Letter grades & raw scores</h2>
+        <p style={para}>
+          Every product review shows two numbers: a <strong style="color:rgb(1,8,22);font-weight:600;">Raw
+          Contract Score</strong> (0–100) and a <strong style="color:rgb(1,8,22);font-weight:600;">Family
+          Grade</strong> (letter). The raw score is computed identically across
+          all products and is directly comparable. The letter grade is
+          percentile-based within each product family.
+        </p>
+        <div style="border:1px solid rgb(226,232,240);border-radius:8px;overflow:hidden;margin:16px 0;">
+          {familyGrades.map((g, i) => (
+            <div style={`display:grid;grid-template-columns:64px 110px 1fr;gap:16px;padding:14px 16px;${i>0 ? "border-top:1px solid rgb(226,232,240);" : ""}align-items:center;`}>
+              <div style={`font-family:${SERIF};font-size:20px;color:rgb(15,23,42);font-weight:600;`}>{g.g}</div>
+              <div style="font-size:14px;color:rgb(1,8,22);font-weight:500;">{g.pct}</div>
+              <div style="font-size:14px;color:rgb(100,116,139);">{g.desc}</div>
+            </div>
+          ))}
+        </div>
+        <p style={para}>
+          For product families with fewer than 10 products, grades are capped
+          at B to avoid over-confidence from small samples.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Limitations to know</h2>
+        <ul style="color:rgb(100,116,139);font-size:16px;line-height:1.625;margin:0;padding-left:24px;display:flex;flex-direction:column;gap:8px;">
+          {limitations.map(l => <li>{l}</li>)}
+        </ul>
+      </section>
+
+    </div>
+  </main>
+</BaseLayout>

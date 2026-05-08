@@ -1,0 +1,182 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "About RankMyAnnuity — Independent Annuity Analysis";
+const description =
+  "An independent tool. No sales, no commissions, no agenda. Built by a licensed life insurance professional with no carrier relationships.";
+
+const SERIF = "'DM Serif Display', Georgia, serif";
+
+const para = "color:rgb(100,116,139);font-size:16px;line-height:1.625;margin:0 0 12px 0;";
+const h2 = `font-family:${SERIF};font-size:20px;color:rgb(1,8,22);margin:0 0 12px 0;font-weight:400;`;
+---
+
+<BaseLayout title={title} description={description}>
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+  <link
+    slot="head"
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap"
+  />
+
+  <main
+    style="max-width:768px;margin:0 auto;padding:48px 24px;color:rgb(1,8,22);font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif;"
+  >
+    <h1
+      style={`font-family:${SERIF};font-size:clamp(1.8rem, 4vw, 2.5rem);color:rgb(1,8,22);margin:0 0 12px 0;line-height:1.15;`}
+    >
+      About RankMyAnnuity
+    </h1>
+    <p style="color:rgb(100,116,139);font-size:18px;line-height:1.625;margin:0 0 40px 0;">
+      An independent tool. No sales, no commissions, no agenda.
+    </p>
+
+    {/* Credentials callout */}
+    <aside
+      style="border-left:4px solid #f59e0b;border-top-right-radius:8px;border-bottom-right-radius:8px;background:rgba(245,158,11,0.04);border-top:1px solid rgba(245,158,11,0.15);border-right:1px solid rgba(245,158,11,0.15);border-bottom:1px solid rgba(245,158,11,0.15);padding:20px 24px;margin:0 0 40px 0;"
+    >
+      <p style={`font-family:${SERIF};font-size:16px;font-weight:600;color:rgb(1,8,22);margin:0 0 8px 0;`}>
+        Credentials & Independence
+      </p>
+      <p style="color:rgb(100,116,139);font-size:14px;line-height:1.625;margin:0 0 12px 0;">
+        Our editorial team holds an active Washington State life insurance
+        license and FINRA Series 65 certification (Uniform Investment Adviser
+        Law Examination) — the same qualifications required to sell and advise
+        on the products we review. No carrier, IMO, or broker-dealer pays for
+        placement, coverage, or access.
+      </p>
+      <ul style="color:rgb(100,116,139);font-size:14px;line-height:1.625;margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;">
+        <li>Active Washington State life insurance license</li>
+        <li>Series 65 — Uniform Investment Adviser Law Examination</li>
+        <li>Thousands of annuity contracts reviewed across dozens of carriers</li>
+      </ul>
+    </aside>
+
+    <div style="display:flex;flex-direction:column;gap:32px;">
+
+      <section>
+        <h2 style={h2}>Why this exists</h2>
+        <p style={para}>
+          The annuity industry generates over $400 billion in annual U.S.
+          sales. The tools available to consumers are almost entirely produced
+          by the same companies selling the products — which means they're
+          designed to show you how much income you'll receive, not whether
+          you're getting a fair rate.
+        </p>
+        <p style={para}>
+          This tool fills that gap. It takes your annuity terms and solves for
+          the implied annual rate of return — the number that lets you compare
+          your annuity to a CD, a Treasury, or a competing product on equal
+          footing.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Who built this</h2>
+        <p style={para}>
+          RankMyAnnuity is published by Pacific Northwest Analytics LLC and was
+          built by a licensed life insurance professional and registered
+          investment adviser representative who has personally reviewed
+          thousands of annuity contracts from dozens of carriers over many
+          years in the industry. The frustration was always the same:
+          consumers had no neutral way to evaluate what they were actually
+          being offered.
+        </p>
+        <p style={para}>
+          This tool is the result of that frustration. The math is
+          actuarial-standard present value methodology — the same framework
+          carriers use internally, made available here for free with no
+          commercial interest attached.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Editorial standards</h2>
+        <p style={para}>
+          Every review follows the same process: we obtain the actual contract
+          language, model the crediting mechanics in our calculator, and grade
+          the implied yield against risk-free benchmarks. Ratings are derived
+          from that math — not from carrier relationships, advertising
+          budgets, or editorial preferences. No carrier pays for placement or
+          favorable coverage.
+        </p>
+        <p style={para}>
+          <a
+            href="/methodology"
+            style="color:rgb(245,158,11);text-decoration:underline;text-underline-offset:2px;"
+          >
+            Read our full grading methodology →
+          </a>
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Independence statement</h2>
+        <p style={para}>
+          RankMyAnnuity has no business relationships with any insurance
+          carrier, IMO, or broker-dealer. We do not sell annuities, accept
+          commissions, or generate leads. This site is funded by advertising
+          revenue and operates independently of the financial products it
+          covers.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>What we don't do</h2>
+        <ul style="color:rgb(100,116,139);font-size:16px;line-height:1.625;margin:0;padding-left:24px;display:flex;flex-direction:column;gap:8px;">
+          <li>We don't sell annuities or receive commissions.</li>
+          <li>We don't earn referral fees for sending you to an insurance agent.</li>
+          <li>We don't collect your personal information to sell to financial firms.</li>
+          <li>We don't tell you whether to buy an annuity — that's for you and a licensed professional to decide.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 style={h2}>Disclosure</h2>
+        <p style={para}>
+          This website is supported by display advertising. Ads are served by
+          third-party networks and are not endorsements of specific financial
+          products. The content on this site is for informational purposes
+          only and does not constitute financial, tax, or legal advice. Always
+          consult a licensed financial professional before making any
+          investment or insurance decision.
+        </p>
+      </section>
+
+      <section>
+        <h2 style={h2}>Contact</h2>
+        <p style={para}>
+          For questions, corrections, or feedback, email us at{" "}
+          <a
+            href="mailto:rankmyannuity@gmail.com"
+            style="color:rgb(245,158,11);text-decoration:underline;text-underline-offset:2px;"
+          >
+            rankmyannuity@gmail.com
+          </a>. We welcome methodological critiques — if you believe the
+          formula or benchmarks are incorrect, tell us.
+        </p>
+      </section>
+
+    </div>
+
+    {/* Footer bar */}
+    <div
+      style="border-top:1px solid rgb(226,232,240);padding-top:24px;margin-top:48px;font-size:12px;color:rgb(100,116,139);display:flex;flex-wrap:wrap;gap:4px 16px;"
+    >
+      <span>© Pacific Northwest Analytics LLC</span>
+      <a href="/terms" style="color:rgb(100,116,139);text-decoration:underline;">Terms of Use</a>
+      <a href="/privacy" style="color:rgb(100,116,139);text-decoration:underline;">Privacy Policy</a>
+      <a href="/methodology" style="color:rgb(100,116,139);text-decoration:underline;">Methodology</a>
+    </div>
+  </main>
+</BaseLayout>
