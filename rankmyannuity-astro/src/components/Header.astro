@@ -15,28 +15,32 @@ const isActive = (href: string) =>
 ---
 
 <header
-  style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgb(226,232,240);"
+  style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgb(226,232,240);font-family:'DM Sans', ui-sans-serif, system-ui, sans-serif;"
 >
   <div
-    style="max-width:1024px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;"
+    class="rma-header-inner"
+    style="max-width:1024px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;"
   >
     <a
       href="/"
-      style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:rgb(1,8,22);"
+      style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:rgb(1,8,22);flex-shrink:0;"
     >
       <span
-        style={`font-family:'DM Serif Display', Georgia, serif;font-size:20px;font-weight:400;letter-spacing:-0.025em;color:rgb(1,8,22);`}
+        style="font-family:'DM Serif Display', Georgia, serif;font-size:20px;font-weight:400;letter-spacing:-0.025em;color:rgb(1,8,22);"
       >
         RankMyAnnuity.pro
       </span>
     </a>
 
-    <nav style="display:flex;align-items:center;gap:4px;">
+    <nav
+      class="rma-header-nav"
+      style="display:flex;align-items:center;gap:2px;flex:1;justify-content:flex-end;"
+    >
       {
         navItems.map((item) => (
           <a
             href={item.href}
-            style={`padding:6px 10px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background-color .15s, color .15s;${
+            style={`padding:8px 12px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background-color .15s, color .15s;${
               isActive(item.href)
                 ? "background:rgb(241,245,249);color:rgb(1,8,22);"
                 : "background:transparent;color:rgb(100,116,139);"
@@ -46,19 +50,38 @@ const isActive = (href: string) =>
           </a>
         ))
       }
+
+      <a
+        href="/calculator"
+        class="rma-header-cta"
+        style="margin-left:12px;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;background:rgb(15,23,42);color:rgb(248,250,252);transition:background-color .15s;"
+      >
+        Grade Your Annuity
+      </a>
     </nav>
   </div>
 </header>
 
 <style>
-  /* Hover effect for nav links — applied via CSS since inline styles can't do :hover */
-  header nav a:hover {
+  /* Hover effects for nav links */
+  header nav a:not(.rma-header-cta):hover {
     background: rgb(241, 245, 249);
     color: rgb(1, 8, 22);
   }
-  /* Mobile: hide desktop nav under 768px (keep simple — no hamburger) */
+  header nav a.rma-header-cta:hover {
+    background: rgb(30, 41, 59);
+  }
+
+  /* Tablet (<= 1024px): hide CTA to save space */
+  @media (max-width: 1023px) {
+    header .rma-header-cta {
+      display: none !important;
+    }
+  }
+
+  /* Mobile (<= 767px): hide entire nav, keep logo */
   @media (max-width: 767px) {
-    header nav {
+    header .rma-header-nav {
       display: none !important;
     }
   }
