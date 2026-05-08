@@ -1,0 +1,65 @@
+---
+// Sticky site header — used inside BaseLayout.astro.
+// All styling is inline so it renders correctly with or without Tailwind tokens.
+const { pathname } = Astro.url;
+const navItems = [
+  { href: "/calculator", label: "Calculator" },
+  { href: "/rates", label: "Rates" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/learn", label: "Learn" },
+  { href: "/methodology", label: "Methodology" },
+  { href: "/about", label: "About" },
+];
+const isActive = (href: string) =>
+  pathname === href || pathname.startsWith(href + "/");
+---
+
+<header
+  style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgb(226,232,240);"
+>
+  <div
+    style="max-width:1024px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;"
+  >
+    <a
+      href="/"
+      style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:rgb(1,8,22);"
+    >
+      <span
+        style={`font-family:'DM Serif Display', Georgia, serif;font-size:20px;font-weight:400;letter-spacing:-0.025em;color:rgb(1,8,22);`}
+      >
+        RankMyAnnuity.pro
+      </span>
+    </a>
+
+    <nav style="display:flex;align-items:center;gap:4px;">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            style={`padding:6px 10px;border-radius:6px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;transition:background-color .15s, color .15s;${
+              isActive(item.href)
+                ? "background:rgb(241,245,249);color:rgb(1,8,22);"
+                : "background:transparent;color:rgb(100,116,139);"
+            }`}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<style>
+  /* Hover effect for nav links — applied via CSS since inline styles can't do :hover */
+  header nav a:hover {
+    background: rgb(241, 245, 249);
+    color: rgb(1, 8, 22);
+  }
+  /* Mobile: hide desktop nav under 768px (keep simple — no hamburger) */
+  @media (max-width: 767px) {
+    header nav {
+      display: none !important;
+    }
+  }
+</style>
