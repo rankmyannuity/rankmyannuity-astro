@@ -59,11 +59,90 @@ const isActive = (href: string) =>
         Grade Your Annuity
       </a>
     </nav>
+
+    <!-- Mobile hamburger button — only visible <768px -->
+    <button
+      type="button"
+      class="rma-mobile-toggle"
+      aria-label="Open menu"
+      aria-expanded="false"
+      aria-controls="rma-mobile-menu"
+      style="display:none;align-items:center;justify-content:center;width:40px;height:40px;padding:0;margin:0;background:transparent;border:1px solid rgb(226,232,240);border-radius:6px;cursor:pointer;color:rgb(1,8,22);flex-shrink:0;"
+    >
+      <svg
+        class="rma-icon-open"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+      <svg
+        class="rma-icon-close"
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        style="display:none;"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div
+    id="rma-mobile-menu"
+    class="rma-mobile-menu"
+    hidden
+    style="display:none;border-top:1px solid rgb(226,232,240);background:rgb(255,255,255);"
+  >
+    <nav
+      style="max-width:1024px;margin:0 auto;padding:12px 24px 20px;display:flex;flex-direction:column;gap:4px;"
+    >
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="rma-mobile-link"
+            style={`padding:12px 14px;border-radius:8px;font-size:16px;font-weight:500;text-decoration:none;transition:background-color .15s, color .15s;${
+              isActive(item.href)
+                ? "background:rgb(241,245,249);color:rgb(1,8,22);"
+                : "background:transparent;color:rgb(51,65,85);"
+            }`}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+      <a
+        href="/calculator"
+        style="margin-top:8px;padding:14px 16px;border-radius:8px;font-size:16px;font-weight:500;text-decoration:none;text-align:center;background:rgb(15,23,42);color:rgb(248,250,252);transition:background-color .15s;"
+      >
+        Grade Your Annuity
+      </a>
+    </nav>
   </div>
 </header>
 
 <style>
-  /* Hover effects for nav links */
+  /* Hover effects for desktop nav links */
   header nav a:not(.rma-header-cta):hover {
     background: rgb(241, 245, 249);
     color: rgb(1, 8, 22);
@@ -71,18 +150,95 @@ const isActive = (href: string) =>
   header nav a.rma-header-cta:hover {
     background: rgb(30, 41, 59);
   }
+  header .rma-mobile-link:hover {
+    background: rgb(241, 245, 249);
+    color: rgb(1, 8, 22);
+  }
+  header .rma-mobile-toggle:hover {
+    background: rgb(241, 245, 249);
+  }
 
-  /* Tablet (<= 1024px): hide CTA to save space */
+  /* Tablet (<= 1024px): hide CTA in desktop nav to save space */
   @media (max-width: 1023px) {
     header .rma-header-cta {
       display: none !important;
     }
   }
 
-  /* Mobile (<= 767px): hide entire nav, keep logo */
+  /* Mobile (<= 767px): swap desktop nav for hamburger toggle */
   @media (max-width: 767px) {
     header .rma-header-nav {
       display: none !important;
     }
+    header .rma-mobile-toggle {
+      display: inline-flex !important;
+    }
+  }
+
+  /* Open state */
+  header .rma-mobile-menu[data-open="true"] {
+    display: block !important;
+  }
+  header .rma-mobile-toggle[aria-expanded="true"] .rma-icon-open {
+    display: none;
+  }
+  header .rma-mobile-toggle[aria-expanded="true"] .rma-icon-close {
+    display: block !important;
   }
 </style>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var btn = document.querySelector("header .rma-mobile-toggle");
+      var menu = document.getElementById("rma-mobile-menu");
+      if (!btn || !menu) return;
+
+      function setOpen(open) {
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        if (open) {
+          menu.removeAttribute("hidden");
+          menu.setAttribute("data-open", "true");
+        } else {
+          menu.setAttribute("hidden", "");
+          menu.removeAttribute("data-open");
+        }
+      }
+
+      btn.addEventListener("click", function () {
+        var isOpen = btn.getAttribute("aria-expanded") === "true";
+        setOpen(!isOpen);
+      });
+
+      // Close when a menu link is clicked (smooths SPA-like nav)
+      menu.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          setOpen(false);
+        });
+      });
+
+      // Close on Escape
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") {
+          setOpen(false);
+          btn.focus();
+        }
+      });
+
+      // Close if viewport grows back to desktop
+      var mq = window.matchMedia("(min-width: 768px)");
+      var onChange = function (e) {
+        if (e.matches) setOpen(false);
+      };
+      if (mq.addEventListener) mq.addEventListener("change", onChange);
+      else mq.addListener(onChange);
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>
