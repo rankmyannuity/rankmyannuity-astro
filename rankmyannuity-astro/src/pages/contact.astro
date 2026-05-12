@@ -1,0 +1,65 @@
+---
+// Contact — content ported from the prior React build at
+// _deploy_old/contact/. Styled to match /about, /methodology, /privacy.
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Contact RankMyAnnuity";
+const description =
+  "Get in touch with RankMyAnnuity.pro — feedback, methodology corrections, or advertising inquiries.";
+
+const SERIF = "'DM Serif Display', Georgia, serif";
+const linkStyle = "color:rgb(1,8,22);text-decoration:underline;text-underline-offset:2px;";
+
+const categories = [
+  {
+    heading: "General Questions & Feedback",
+    desc: "Questions about how the calculators work, site feedback, or anything else.",
+    email: "rankmyannuity@gmail.com",
+  },
+  {
+    heading: "Methodology & Corrections",
+    desc: "If you believe the IRR formula, benchmark rates, or index data contains an error, we want to know. We take methodological accuracy seriously and will respond to substantive critiques.",
+    email: "rankmyannuity@gmail.com",
+  },
+  {
+    heading: "Advertising Inquiries",
+    desc: "Display advertising is managed through Google AdSense. For other advertising inquiries, reach out by email.",
+    email: "rankmyannuity@gmail.com",
+  },
+];
+---
+<BaseLayout title={title} description={description}>
+  <main
+    style="max-width:768px;margin:0 auto;padding:48px 24px;color:rgb(1,8,22);font-family:'DM Sans',ui-sans-serif,system-ui,sans-serif;"
+  >
+    <p style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgb(245,158,11);margin:0 0 12px 0;">Get in touch</p>
+
+    <h1 style={`font-family:${SERIF};font-size:clamp(1.8rem, 4vw, 2.5rem);color:rgb(1,8,22);margin:0 0 12px 0;line-height:1.15;font-weight:400;`}>
+      Contact
+    </h1>
+
+    <p style="color:rgb(100,116,139);font-size:18px;line-height:1.625;margin:0 0 40px 0;">
+      We read every message. Response time is typically 1–3 business days.
+    </p>
+
+    <div style="display:grid;gap:20px;margin:0 0 40px 0;">
+      {categories.map((c) => (
+        <section style="border:1px solid rgb(226,232,240);border-radius:12px;padding:24px;background:rgb(255,255,255);">
+          <h2 style={`font-family:${SERIF};font-size:20px;color:rgb(1,8,22);margin:0 0 8px 0;font-weight:400;`}>
+            {c.heading}
+          </h2>
+          <p style="color:rgb(100,116,139);font-size:15px;line-height:1.6;margin:0 0 12px 0;">
+            {c.desc}
+          </p>
+          <a href={`mailto:${c.email}`} style="color:rgb(1,8,22);font-size:15px;font-weight:500;text-decoration:underline;text-underline-offset:2px;">
+            {c.email}
+          </a>
+        </section>
+      ))}
+    </div>
+
+    <p style="color:rgb(148,163,184);font-size:14px;line-height:1.6;border-top:1px solid rgb(226,232,240);padding-top:24px;">
+      RankMyAnnuity does not provide personalized financial, tax, or legal advice. For questions about a specific annuity contract or your personal financial situation, please consult a <a href="/methodology" style={linkStyle}>licensed financial professional</a>.
+    </p>
+  </main>
+</BaseLayout>
