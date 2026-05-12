@@ -1,10 +1,23 @@
 ---
 // ReviewLayout — used by /reviews/[slug] for both carrier and product reviews.
-// Includes breadcrumbs, H1, author block, optional grade verdict, key-facts
-// strip, disclaimer, body slot, related links, sources.
+//
+// Visual spec mirrors the React build (see /home/user/workspace/_deploy_old/
+// reviews/athene-performance-elite/ for the reference):
+//   - amber eyebrow with the carrier name
+//   - DM Serif Display H1 (~40px, weight 400, slate-950)
+//   - 18px muted lead paragraph
+//   - author byline with bottom border separator
+//   - rounded key-facts strip with bg-muted/30 background
+//   - DM Serif Display H2 (20px, weight 400) inside the body
+//   - 16px muted body paragraphs with comfortable line-height
+//
+// All styling is inlined with rgb() — tailwind.config.mjs ships shadcn
+// tokens but they were orphaned without global.css, so we cannot rely on
+// var(--muted) / var(--rule). The MDX body is styled via the global
+// [data-review-body] rules in the <style is:global> block below, the
+// same pattern PR #3 used for ArticleLayout.
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
-import AuthorBlock from '@components/AuthorBlock.astro';
 import DisclaimerSlot from '@components/DisclaimerSlot.astro';
 import RelatedLinks from '@components/RelatedLinks.astro';
 import SourceList from '@components/SourceList.astro';
@@ -71,26 +84,51 @@ const crumbs = [
 const factEntries = Object.entries(facts).filter(([, v]) => v !== undefined && v !== '');
 const gradeVisible = !!verdict.grade && verdict.gradeStatus === 'active';
 const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.length ?? 0) > 0;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+// "Athene Annuity Review" / "Performance Elite Review" — the small amber
+// eyebrow above the H1. Uses the breadcrumbLabel when set, otherwise the
+// review kind label.
+const eyebrow = breadcrumbLabel
+  ? `${breadcrumbLabel}`
+  : kind === 'carrier'
+    ? 'Carrier Review'
+    : 'Product Review';
 ---
 <BaseLayout title={title} description={description} canonicalPath={canonicalPath} noindex={noindex}>
-  <article class="mx-auto max-w-3xl px-4 py-10">
+  <article style="max-width:768px;margin:0 auto;padding:48px 24px;">
     <Breadcrumbs items={crumbs} />
 
-    <header class="mt-4 mb-6">
-      <p class="text-xs uppercase tracking-wide text-[var(--muted)]">
-        {kind === 'carrier' ? 'Carrier review' : 'Product review'}
-      </p>
-      <h1 class="mt-1 text-3xl font-semibold tracking-tight">{title}</h1>
-      <p class="mt-3 text-[var(--muted)]">{description}</p>
-      <AuthorBlock
-        author={author}
-        reviewer={reviewer}
-        publishedAt={publishedAt}
-        updatedAt={updatedAt}
-      />
+    <header style="margin-top:24px;margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+        <span style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgb(245,158,11);">{eyebrow}</span>
+      </div>
+
+      <h1 style="font-family:'DM Serif Display', Georgia, serif;font-size:clamp(1.8rem, 4vw, 2.5rem);line-height:1.2;font-weight:400;color:rgb(2,8,23);margin:0 0 16px 0;">{title}</h1>
+
+      <p style="font-size:18px;line-height:1.625;color:rgb(100,116,139);margin:0 0 16px 0;">{description}</p>
+
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:12px;font-size:14px;color:rgb(100,116,139);padding-bottom:24px;border-bottom:1px solid rgb(226,232,240);">
+        <span>By {author.url ? <a href={author.url} style="color:inherit;text-decoration:underline;">{author.name}</a> : author.name}</span>
+        {reviewer && (
+          <>
+            <span aria-hidden="true">·</span>
+            <span>Reviewed by {reviewer.url ? <a href={reviewer.url} style="color:inherit;text-decoration:underline;">{reviewer.name}</a> : reviewer.name}</span>
+          </>
+        )}
+        <span aria-hidden="true">·</span>
+        <span>Published <time datetime={publishedAt.toISOString()}>{fmt(publishedAt)}</time></span>
+        <span aria-hidden="true">·</span>
+        <span>Updated <time datetime={updatedAt.toISOString()}>{fmt(updatedAt)}</time></span>
+      </div>
+
       {tags.length > 0 && (
-        <ul class="mt-3 flex flex-wrap gap-2 text-xs">
-          {tags.map((t) => <li class="rounded border border-[var(--rule)] px-2 py-0.5">{t}</li>)}
+        <ul style="list-style:none;padding:0;margin:16px 0 0 0;display:flex;flex-wrap:wrap;gap:8px;">
+          {tags.map((t) => (
+            <li style="font-size:12px;color:rgb(100,116,139);padding:4px 10px;border:1px solid rgb(226,232,240);border-radius:9999px;background:rgb(248,250,252);">{t}</li>
+          ))}
         </ul>
       )}
     </header>
@@ -98,12 +136,12 @@ const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.leng
     {factEntries.length > 0 && (
       <section
         aria-label="Key facts"
-        class="rounded border border-[var(--rule)] p-4 my-6 grid gap-3 text-sm md:grid-cols-4"
+        style="background:rgb(248,250,252);border:1px solid rgb(226,232,240);border-radius:12px;padding:20px;margin:0 0 32px 0;display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:16px;"
       >
         {factEntries.map(([k, v]) => (
           <div>
-            <div class="text-[var(--muted)]">{k}</div>
-            <div>{v}</div>
+            <div style="font-size:12px;color:rgb(100,116,139);margin-bottom:4px;">{k}</div>
+            <div style="font-size:14px;font-weight:600;color:rgb(2,8,23);">{v}</div>
           </div>
         ))}
       </section>
@@ -112,19 +150,19 @@ const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.leng
     {hasVerdict && (
       <section
         aria-label="Editorial verdict"
-        class="rounded border border-[var(--rule)] p-4 my-4 text-sm"
+        style="border:1px solid rgb(226,232,240);border-radius:12px;padding:20px;margin:0 0 24px 0;font-size:14px;color:rgb(51,65,85);line-height:1.6;"
       >
         {verdict.grade && verdict.gradeStatus === 'active' && (
-        <p><strong>Grade:</strong> <span class="font-semibold">{verdict.grade}</span></p>
+          <p style="margin:0 0 8px 0;"><strong style="color:rgb(2,8,23);">Grade:</strong> <span style="font-weight:600;color:rgb(2,8,23);">{verdict.grade}</span></p>
         )}
         {verdict.bestFor && (
-          <p class="mt-1"><strong>Best for:</strong> {verdict.bestFor}</p>
+          <p style="margin:8px 0 0 0;"><strong style="color:rgb(2,8,23);">Best for:</strong> {verdict.bestFor}</p>
         )}
         {verdict.watchouts && verdict.watchouts.length > 0 && (
-          <div class="mt-1">
-            <strong>Watch-outs:</strong>
-            <ul class="list-disc pl-5 mt-1">
-              {verdict.watchouts.map((w) => <li>{w}</li>)}
+          <div style="margin-top:8px;">
+            <strong style="color:rgb(2,8,23);">Watch-outs:</strong>
+            <ul style="list-style:disc;padding-left:20px;margin:6px 0 0 0;">
+              {verdict.watchouts.map((w) => <li style="margin:4px 0;">{w}</li>)}
             </ul>
           </div>
         )}
@@ -133,7 +171,7 @@ const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.leng
 
     <DisclaimerSlot variant={kind === 'carrier' ? 'carrier' : 'product'} />
 
-    <div data-review-body class="prose">
+    <div data-review-body>
       <slot />
     </div>
 
@@ -141,3 +179,153 @@ const hasVerdict = gradeVisible || !!verdict.bestFor || (verdict.watchouts?.leng
     <RelatedLinks items={related} />
   </article>
 </BaseLayout>
+
+<style is:global>
+  /* Review body styles — applied to the rendered MDX content slot. */
+  /* Headings use DM Serif Display to match the H1 (and the React build). */
+
+  [data-review-body] {
+    color: rgb(51, 65, 85);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  [data-review-body] h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 400;
+    color: rgb(2, 8, 23);
+    margin: 40px 0 12px 0;
+  }
+
+  [data-review-body] h3 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 19px;
+    line-height: 1.35;
+    font-weight: 400;
+    color: rgb(2, 8, 23);
+    margin: 28px 0 10px 0;
+  }
+
+  [data-review-body] p {
+    margin: 0 0 16px 0;
+    color: rgb(51, 65, 85);
+  }
+
+  [data-review-body] strong {
+    color: rgb(2, 8, 23);
+    font-weight: 600;
+  }
+
+  [data-review-body] a {
+    color: rgb(2, 8, 23);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  [data-review-body] a:hover {
+    color: rgb(249, 112, 21);
+  }
+
+  [data-review-body] ul,
+  [data-review-body] ol {
+    margin: 0 0 16px 0;
+    padding-left: 24px;
+    color: rgb(51, 65, 85);
+  }
+
+  [data-review-body] ul {
+    list-style: disc;
+  }
+
+  [data-review-body] ol {
+    list-style: decimal;
+  }
+
+  [data-review-body] li {
+    margin: 6px 0;
+  }
+
+  [data-review-body] li > p {
+    margin: 0;
+  }
+
+  [data-review-body] blockquote {
+    border-left: 3px solid rgb(226, 232, 240);
+    padding-left: 16px;
+    margin: 20px 0;
+    color: rgb(100, 116, 139);
+    font-style: italic;
+  }
+
+  [data-review-body] code {
+    background: rgb(241, 245, 249);
+    color: rgb(2, 8, 23);
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  [data-review-body] pre {
+    background: rgb(15, 23, 42);
+    color: rgb(248, 250, 252);
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 16px 0;
+  }
+
+  [data-review-body] pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  [data-review-body] hr {
+    border: 0;
+    border-top: 1px solid rgb(226, 232, 240);
+    margin: 32px 0;
+  }
+
+  [data-review-body] table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  [data-review-body] th,
+  [data-review-body] td {
+    border: 1px solid rgb(226, 232, 240);
+    padding: 8px 12px;
+    text-align: left;
+  }
+
+  [data-review-body] th {
+    background: rgb(248, 250, 252);
+    font-weight: 600;
+    color: rgb(2, 8, 23);
+  }
+
+  /* Pipeline-computed data block — overrides the muted body color so the
+     numeric facts read as data, not prose. Lives outside [data-review-body]
+     in the template but uses the same visual language. */
+  [data-pipeline-block] {
+    background: rgb(248, 250, 252);
+    border: 1px solid rgb(226, 232, 240) !important;
+    border-radius: 12px;
+    padding: 20px !important;
+    margin: 0 0 24px 0 !important;
+    color: rgb(51, 65, 85);
+  }
+
+  [data-pipeline-block] h2 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgb(2, 8, 23);
+    margin: 0;
+  }
+</style>
