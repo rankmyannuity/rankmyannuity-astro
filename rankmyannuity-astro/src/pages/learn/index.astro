@@ -1,152 +1,122 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-// If you have a content collection, you can replace the static array below with:
-//   import { getCollection } from "astro:content";
-//   const articles = await getCollection("learn");
-// Then map each entry to the same { slug, eyebrow, title, description } shape used here.
+import { getCollection } from "astro:content";
 
-// Foundations: educational guides (matches live rankmyannuity.pro/learn).
-const foundations = [
-  {
-    slug: "types-of-annuities",
-    eyebrow: "Foundations",
-    title: "What Are the Different Kinds of Annuities?",
-    description:
-      "Immediate vs. deferred, fixed, fixed indexed, variable, RILA — and how a single carrier product can resemble all of them at once.",
-  },
-  {
-    slug: "cap-rates",
-    eyebrow: "FIA Mechanics",
-    title: "What Is a Cap Rate and Why Does It Matter?",
-    description:
-      "A 10% cap is not a 10% return. How FIA crediting caps work, why carriers reset them annually, and how to evaluate whether a cap is competitive.",
-  },
-  {
-    slug: "fia-vs-myga",
-    eyebrow: "Product Comparison",
-    title: "FIA vs. MYGA — Which Pays More Over 10 Years?",
-    description:
-      "The structural differences between index-linked and guaranteed returns, and the scenarios where each wins.",
-  },
-  {
-    slug: "best-fia-index-strategies",
-    eyebrow: "Index Analysis",
-    title: "Best FIA Index Strategies — Backtested Crediting Performance",
-    description:
-      "Why index selection matters, what volatility-controlled indexes actually are, and how to run your own backtest.",
-  },
-  {
-    slug: "how-to-read-fia-illustration",
-    eyebrow: "Due Diligence",
-    title: "How to Read an FIA Illustration",
-    description:
-      "What carriers are required to show, what they aren't, and the red flags that signal a cherry-picked scenario.",
-  },
+/**
+ * Learn index — dynamic.
+ *
+ * Articles are pulled from the `learn` content collection. Any new .mdx file
+ * dropped into src/content/learn/ will appear automatically (unless draft:true).
+ *
+ * Section split:
+ *   - "Foundations" = the curated evergreen explainers listed in FOUNDATION_SLUGS.
+ *   - "Editor's Take" = everything else, sorted newest-first by publishedAt.
+ *
+ * Per-article eyebrow label:
+ *   - Use EYEBROW_OVERRIDES[slug] if present (matches the labels used on the
+ *     live site before this refactor).
+ *   - Otherwise, title-case the article's first tag.
+ */
+
+// Foundations are the 5 stable beginner explainers. Order here = display order.
+const FOUNDATION_SLUGS = [
+  "types-of-annuities",
+  "cap-rates",
+  "fia-vs-myga",
+  "best-fia-index-strategies",
+  "how-to-read-fia-illustration",
 ];
 
-// Editor's Take: editorial analysis (matches live site)
-const editorsTake = [
-  {
-    slug: "new-annuity-products-2026",
-    eyebrow: "Market Analysis",
-    title: "New Annuity Products 2026: An Analytical Exposé",
-    description:
-      "Eight major launches in six months — crypto-linked FIAs, adjustable-income RILAs, hybrid LTC, and locked cap ladders. What each carrier is really doing.",
-  },
-  {
-    slug: "corebridge-equitable-merger",
-    eyebrow: "Industry Analysis",
-    title: "What the Corebridge–Equitable Merger Means for Annuity Buyers",
-    description:
-      "A $22 billion merger creating a $1.5 trillion retirement giant. Impact on existing policyholders and product lines.",
-  },
-  {
-    slug: "carrier-debt-risk",
-    eyebrow: "Risk & Due Diligence",
-    title: "The Debt Beneath Your Annuity: AM Best's Report on Carrier Risk",
-    description:
-      "AM Best reports that life/annuity insurers hold more risky debt than before 2008 with thinner capital buffers.",
-  },
-  {
-    slug: "interest-recapture",
-    eyebrow: "Risk & Due Diligence",
-    title: "FIA Interest Recapture Provisions — What They Mean for Your Returns",
-    description:
-      "Some FIA contracts let carriers take back credited interest under specific circumstances. What to watch for.",
-  },
-  {
-    slug: "market-value-adjustment",
-    eyebrow: "Contract Terms",
-    title: "Market Value Adjustments (MVAs) — The Hidden Cost of Early Surrender",
-    description:
-      "How MVAs work, when they apply, and why your surrender value can differ significantly from your account value.",
-  },
-  {
-    slug: "share-classes",
-    eyebrow: "Compensation",
-    title: "Annuity Share Classes — B, C, L, and Advisory Fee-Based",
-    description:
-      "How different commission structures affect product design, pricing, and whether the product is suitable for you.",
-  },
-  {
-    slug: "fidelity-fpra",
-    eyebrow: "Product Comparison",
-    title: "Fidelity's Personal Retirement Annuity — An Analytical Look",
-    description:
-      "How Fidelity's no-surrender-charge VA compares to traditional variable annuities on cost, fund selection, and flexibility.",
-  },
-  {
-    slug: "volatility-indexes",
-    eyebrow: "Index Analysis",
-    title: "Volatility-Controlled Indexes — Marketing vs. Math",
-    description:
-      "Engineered indexes dominate FIA marketing. How they work, what they sacrifice, and when the complexity is (or isn't) worth it.",
-  },
-  {
-    slug: "renewal-cap-rates",
-    eyebrow: "Rates & Pricing",
-    title: "How Carriers Set and Reset FIA Cap Rates",
-    description:
-      "Why the cap rate you see today probably isn't the cap rate you'll keep. The economics behind renewal rate decisions.",
-  },
-  {
-    slug: "best-fixed-indexed-annuities",
-    eyebrow: "Rankings",
-    title: "Best Fixed Indexed Annuities — An Analytical Ranking",
-    description:
-      "Our framework for evaluating FIAs beyond the surface-level cap rate comparison.",
-  },
-  {
-    slug: "best-variable-annuities",
-    eyebrow: "Rankings",
-    title: "Best Variable Annuities — Fee-Conscious Picks",
-    description:
-      "Variable annuities ranked by total cost, fund selection, and living benefit quality.",
-  },
-  {
-    slug: "fia-vs-rila",
-    eyebrow: "Product Comparison",
-    title: "FIA vs. RILA — Downside Protection Compared",
-    description:
-      "Floor vs. buffer: the structural trade-offs between fixed indexed annuities and registered index-linked annuities.",
-  },
-  {
-    slug: "variable-annuity-fees",
-    eyebrow: "Fee Analysis",
-    title: "Variable Annuity Fees — Every Layer Explained",
-    description:
-      "M&E charges, sub-account fees, rider costs, surrender charges — the full fee stack and what each layer is actually paying for.",
-  },
-  {
-    slug: "best-annuity-retirement-income",
-    eyebrow: "Income Planning",
-    title: "Best Annuities for Retirement Income",
-    description:
-      "How to evaluate income annuities: payout rate, implied IRR, crediting quality, and withdrawal flexibility.",
-  },
-];
+// Curated eyebrow labels (match what was on the live site).
+const EYEBROW_OVERRIDES: Record<string, string> = {
+  "types-of-annuities": "Foundations",
+  "cap-rates": "FIA Mechanics",
+  "fia-vs-myga": "Product Comparison",
+  "best-fia-index-strategies": "Index Analysis",
+  "how-to-read-fia-illustration": "Due Diligence",
+  "new-annuity-products-2026": "Market Analysis",
+  "corebridge-equitable-merger": "Industry Analysis",
+  "carrier-debt-risk": "Risk & Due Diligence",
+  "interest-recapture": "Risk & Due Diligence",
+  "market-value-adjustment": "Contract Terms",
+  "share-classes": "Compensation",
+  "fidelity-fpra": "Product Comparison",
+  "volatility-indexes": "Index Analysis",
+  "renewal-cap-rates": "Rates & Pricing",
+  "best-fixed-indexed-annuities": "Rankings",
+  "best-variable-annuities": "Rankings",
+  "fia-vs-rila": "Product Comparison",
+  "variable-annuity-fees": "Fee Analysis",
+  "best-annuity-retirement-income": "Income Planning",
+  "ubs-widow-variable-annuity-arbitration": "Case Study",
+};
 
-// Card markup is reused for both sections.
+function titleCase(s: string): string {
+  return s
+    .split(/\s+/)
+    .map((w) => (w.length === 0 ? w : w[0].toUpperCase() + w.slice(1)))
+    .join(" ");
+}
+
+function eyebrowFor(slug: string, tags: string[] | undefined): string {
+  if (EYEBROW_OVERRIDES[slug]) return EYEBROW_OVERRIDES[slug];
+  if (tags && tags.length > 0) return titleCase(tags[0]);
+  return "Article";
+}
+
+type CardData = {
+  slug: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+};
+
+// Pull every non-draft Learn article.
+const allEntries = await getCollection("learn", (entry) => entry.data.draft !== true);
+
+// Index by slug for foundation lookup. Prefer the frontmatter slug field; fall
+// back to the file slug Astro derives from the filename.
+const bySlug = new Map<string, (typeof allEntries)[number]>();
+for (const entry of allEntries) {
+  const s = (entry.data as any).slug || entry.slug;
+  bySlug.set(s, entry);
+}
+
+// Build Foundations in the curated order. Skip any that aren't on disk.
+const foundations: CardData[] = FOUNDATION_SLUGS.map((slug) => {
+  const entry = bySlug.get(slug);
+  if (!entry) return null;
+  const data = entry.data as any;
+  return {
+    slug,
+    eyebrow: eyebrowFor(slug, data.tags),
+    title: data.title as string,
+    description: data.description as string,
+  } as CardData;
+}).filter((x): x is CardData => x !== null);
+
+// Editor's Take = everything not in Foundations, newest first.
+const foundationSet = new Set(FOUNDATION_SLUGS);
+const editorsTake: CardData[] = allEntries
+  .filter((entry) => {
+    const s = (entry.data as any).slug || entry.slug;
+    return !foundationSet.has(s);
+  })
+  .sort((a, b) => {
+    const da = new Date((a.data as any).publishedAt).getTime();
+    const db = new Date((b.data as any).publishedAt).getTime();
+    return db - da;
+  })
+  .map((entry) => {
+    const data = entry.data as any;
+    const slug = data.slug || entry.slug;
+    return {
+      slug,
+      eyebrow: eyebrowFor(slug, data.tags),
+      title: data.title as string,
+      description: data.description as string,
+    };
+  });
 ---
 
 <BaseLayout
