@@ -15,9 +15,6 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import CalculatorShell from '../components-react/calculator/CalculatorShell.tsx';
 
-const lastUpdated = '2026-04-21';
-const lastUpdatedLabel = 'April 21, 2026';
-
 const faqs = [
   {
     q: 'What does the Annuity Grade Calculator actually compute?',
@@ -87,51 +84,31 @@ const relatedLearn = [
   {/* FAQPage JSON-LD for rich results */}
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} slot="head" />
 
-  <section style="max-width:1024px;margin:0 auto;padding:40px 24px;">
-    {/* Eyebrow */}
-    <p style="margin:0 0 12px;color:rgb(249,112,21);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;">
-      Free Annuity Analysis Tools
-    </p>
-
-    {/* Page H1 in DM Serif Display, scoped to this page */}
-    <h1 style="margin:0 0 16px;font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:clamp(1.8rem,4vw,2.5rem);line-height:1.15;color:rgb(1,8,22);">
-      Annuity Grade Calculator
-    </h1>
-
-    {/* Intro */}
-    <p style="margin:0 0 8px;max-width:42rem;color:rgb(100,116,139);font-size:16px;line-height:1.6;">
-      Enter the four numbers on your annuity quote and get the implied annual
-      rate of return, a letter grade against fixed-income benchmarks, and a
-      side-by-side comparison to current MYGA and Treasury rates. Nothing is
-      stored. No account required.
-    </p>
-
-    <p style="margin:0;font-size:12px;color:rgb(100,116,139);">
-      Last updated <time datetime={lastUpdated}>{lastUpdatedLabel}</time>
-    </p>
+  <section>
+    {/* Page chrome is owned by CalculatorShell / IncomeCalculator — the React
+        island renders its own H1, intro, two-column form + results layout,
+        examples row, benchmarks panel, and grading scale.  Adding outer
+        chrome here would only duplicate the H1 and break the visual rhythm. */}
 
     {/* Interactive calculator island — the ONLY hydrated region on this page.
         client:visible defers hydration until the tool scrolls into view,
         which keeps initial page weight low and preserves a static HTML
         paint first. */}
-    <div class="my-8">
-      <CalculatorShell client:visible />
-      <noscript>
-        <div class="rounded border border-[var(--rule)] p-6 text-sm text-[var(--muted)]">
-          The interactive calculator requires JavaScript. The explainer, FAQ,
-          and <a href="/methodology">methodology page</a> below describe
-          exactly how the implied rate and grade are computed — you can reach
-          the same answer with a financial calculator or a spreadsheet using
-          the deferred-annuity present-value formula with monthly
-          compounding.
-        </div>
-      </noscript>
-    </div>
+    <CalculatorShell client:visible />
+    <noscript>
+      <div style="max-width:1024px;margin:24px auto;padding:24px;border:1px solid rgb(226,232,240);border-radius:8px;color:rgb(100,116,139);font-size:14px;">
+        The interactive calculator requires JavaScript. The explainer, FAQ,
+        and <a href="/methodology" style="color:rgb(15,23,42);">methodology page</a> below describe
+        exactly how the implied rate and grade are computed — you can reach
+        the same answer with a financial calculator or a spreadsheet using
+        the deferred-annuity present-value formula with monthly compounding.
+      </div>
+    </noscript>
 
     {/* Server-rendered explainer — always in the raw HTML, always crawlable. */}
-    <div class="prose prose-sm max-w-none">
-      <h2 class="text-xl font-semibold mt-10">How this calculator works</h2>
-      <p class="mt-2 text-sm text-[var(--muted)]">
+    <div style="max-width:1024px;margin:0 auto;padding:48px 24px 64px;">
+      <h2 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.5rem;color:rgb(1,8,22);margin:0 0 12px;">How this calculator works</h2>
+      <p style="margin:0 0 16px;color:rgb(71,85,105);font-size:15px;line-height:1.65;">
         Most annuity quotes advertise a monthly payout and a duration. What
         the buyer actually wants to know is the <em>implied annual rate of
         return</em> — the single fixed rate that reconciles the lump-sum
@@ -140,8 +117,8 @@ const relatedLearn = [
         grade.
       </p>
 
-      <h3 class="text-lg font-semibold mt-6">The IRR calculation, in plain English</h3>
-      <p class="mt-2 text-sm text-[var(--muted)]">
+      <h3 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.2rem;color:rgb(1,8,22);margin:24px 0 8px;">The IRR calculation, in plain English</h3>
+      <p style="margin:0 0 16px;color:rgb(71,85,105);font-size:15px;line-height:1.65;">
         The solver uses the deferred-annuity present-value formula with
         monthly compounding (12 periods per year). Starting from an initial
         guess of 4% when total lifetime payout exceeds the premium (or −1%
@@ -153,22 +130,22 @@ const relatedLearn = [
         whose recomputed present value drifts more than 1% from premium.
       </p>
 
-      <h3 class="text-lg font-semibold mt-6">How grades are derived</h3>
-      <ul class="mt-2 text-sm text-[var(--muted)] list-disc pl-6 space-y-1">
+      <h3 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.2rem;color:rgb(1,8,22);margin:24px 0 8px;">How grades are derived</h3>
+      <ul style="margin:0 0 16px;padding-left:24px;color:rgb(71,85,105);font-size:15px;line-height:1.7;">
         <li><strong>A+</strong> — implied rate ≥ 8.00%. Exceptional, top of market.</li>
         <li><strong>A</strong> — 6.00% ≤ rate &lt; 8.00%. Beats most fixed-income benchmarks.</li>
         <li><strong>B</strong> — 4.00% ≤ rate &lt; 6.00%. Fair — competitive with CDs/Treasuries.</li>
         <li><strong>C</strong> — 2.00% ≤ rate &lt; 4.00%. Below average — shop around.</li>
         <li><strong>F</strong> — rate &lt; 2.00%. Poor — likely a bad deal.</li>
       </ul>
-      <p class="mt-2 text-sm text-[var(--muted)]">
+      <p style="margin:0 0 16px;color:rgb(71,85,105);font-size:15px;line-height:1.65;">
         All thresholds are inclusive of the lower bound. Full grading
         methodology and the benchmark data sources are documented on the
-        <a href="/methodology">methodology page</a>.
+        <a href="/methodology" style="color:rgb(15,23,42);">methodology page</a>.
       </p>
 
-      <h3 class="text-lg font-semibold mt-6">Key assumptions and limitations</h3>
-      <ul class="mt-2 text-sm text-[var(--muted)] list-disc pl-6 space-y-1">
+      <h3 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.2rem;color:rgb(1,8,22);margin:24px 0 8px;">Key assumptions and limitations</h3>
+      <ul style="margin:0 0 16px;padding-left:24px;color:rgb(71,85,105);font-size:15px;line-height:1.7;">
         <li>Monthly compounding; level monthly payments over the full payout duration.</li>
         <li>A single deferral period before payments begin. Zero deferral = immediate annuity.</li>
         <li>Surrender charges, rider fees, MVAs, and premium bonuses are <em>not</em> applied to the displayed IRR. Compare them separately.</li>
@@ -176,29 +153,29 @@ const relatedLearn = [
         <li>FIA illustrations are hypothetical. For an FIA, the monthly payout you input is itself a projection; the implied rate inherits that hypothetical status.</li>
       </ul>
 
-      <h2 class="text-xl font-semibold mt-10">Frequently asked questions</h2>
-      <dl class="mt-4 space-y-6">
+      <h2 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.5rem;color:rgb(1,8,22);margin:40px 0 12px;">Frequently asked questions</h2>
+      <dl style="margin:16px 0 0;">
         {faqs.map((f) => (
-          <div>
-            <dt class="font-semibold text-sm">{f.q}</dt>
-            <dd class="mt-1 text-sm text-[var(--muted)]">{f.a}</dd>
+          <div style="margin-bottom:20px;">
+            <dt style="font-weight:600;font-size:15px;color:rgb(1,8,22);margin-bottom:4px;">{f.q}</dt>
+            <dd style="margin:0;color:rgb(71,85,105);font-size:15px;line-height:1.65;">{f.a}</dd>
           </div>
         ))}
       </dl>
 
-      <h2 class="text-xl font-semibold mt-10">Related reading</h2>
-      <ul class="mt-2 text-sm list-disc pl-6 space-y-1">
+      <h2 style="font-family:'DM Serif Display',Georgia,serif;font-weight:400;font-size:1.5rem;color:rgb(1,8,22);margin:40px 0 12px;">Related reading</h2>
+      <ul style="margin:0;padding-left:24px;color:rgb(71,85,105);font-size:15px;line-height:1.8;">
         {relatedLearn.map((r) => (
           <li>
-            <a href={`/learn/${r.slug}`}>{r.title}</a>
+            <a href={`/learn/${r.slug}`} style="color:rgb(15,23,42);">{r.title}</a>
           </li>
         ))}
         <li>
-          <a href="/methodology">Methodology — how we rank and grade annuities</a>
+          <a href="/methodology" style="color:rgb(15,23,42);">Methodology — how we rank and grade annuities</a>
         </li>
       </ul>
 
-      <div class="mt-10 rounded border border-[var(--rule)] p-4 text-xs text-[var(--muted)]">
+      <div style="margin-top:40px;padding:16px;border:1px solid rgb(226,232,240);border-radius:8px;color:rgb(100,116,139);font-size:13px;line-height:1.6;">
         <strong>Disclaimer.</strong> This calculator is an educational tool.
         Results are hypothetical illustrations and do not constitute personalized
         investment, tax, or legal advice. Actual credited interest depends on

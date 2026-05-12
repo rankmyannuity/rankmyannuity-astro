@@ -17,6 +17,8 @@
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
     --border: 214.3 31.8% 91.4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -32,5 +34,64 @@
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+  }
+}
+
+/* Letter-grade display inside the ResultCard.
+   Renders the single A+/A/B/C/F letter as a large serif glyph with a
+   subtle tinted background ring. Color comes from the grade-* modifier. */
+@layer components {
+  .grade-display {
+    font-family: "DM Serif Display", Georgia, serif;
+    font-weight: 400;
+    font-size: 5rem;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    width: 7rem;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background-color: rgba(241, 245, 249, 0.6);
+    border: 1px solid rgb(226, 232, 240);
+  }
+  .grade-aplus { color: rgb(22, 163, 74);  background-color: rgba(220, 252, 231, 0.7); border-color: rgb(187, 247, 208); }
+  .grade-a     { color: rgb(22, 163, 74);  background-color: rgba(220, 252, 231, 0.7); border-color: rgb(187, 247, 208); }
+  .grade-b     { color: rgb(202, 138, 4);  background-color: rgba(254, 249, 195, 0.7); border-color: rgb(254, 240, 138); }
+  .grade-c     { color: rgb(234, 88, 12);  background-color: rgba(255, 237, 213, 0.7); border-color: rgb(254, 215, 170); }
+  .grade-f     { color: rgb(220, 38, 38);  background-color: rgba(254, 226, 226, 0.7); border-color: rgb(254, 202, 202); }
+
+  /* Subtle fade-in for the result card after Calculate Grade is clicked. */
+  .result-animate {
+    animation: rma-fade-in 240ms ease-out;
+  }
+  @keyframes rma-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Horizontal progress-style bar shown under each benchmark row.
+     Must be position:relative + fixed-height so the absolute-positioned
+     coloured fill (bg-green-500 / bg-destructive) sizes correctly. Without
+     this, the fill collapses to the document height and paints a giant
+     green / red blob across the whole result panel. */
+  .benchmark-bar {
+    position: relative;
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background-color: rgb(241, 245, 249);
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .benchmark-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 9999px;
   }
 }
