@@ -43,3 +43,22 @@ approvals:
       document and the standing directives. Separate
       external sign-offs will supersede these attestations
       as the project scales.
+  - carrier_slug: athene
+    mdx_path: src/content/reviews/athene.mdx
+    mdx_sha256: 01145d10a9fbdeb5c549e464183a2446c9ecffb646bdbc887957230befb0f88e
+    approved_by: c-brothersen
+    approved_at: "2026-05-12"
+    notes: >
+      Solo-operator attestation under the same standing directive
+      as new-york-life. Re-audited after PR #13 hid all pilot
+      reviews; this carrier review carries editorial substance
+      (no scaffold language) and is promoted to shipping.
+  - carrier_slug: athene-performance-elite
+    mdx_path: src/content/reviews/athene-performance-elite.mdx
+    mdx_sha256: da4f5d8767ea27ad24fc25645d579d243b9f8eae8b50405123e1d0ea3edaf113
+    approved_by: c-brothersen
+    approved_at: "2026-05-12"
+    notes: >
+      Solo-operator attestation. Product review with full editorial
+      content; re-audited and promoted to shipping alongside the
+      Athene carrier review.
