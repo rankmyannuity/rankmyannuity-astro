@@ -20,7 +20,13 @@ import { checkFrontmatterCrossField } from '../../data-pipeline/predicates/front
 /* ---------- shared helpers ---------- */
 
 const isoDate = z.coerce.date();
-const url = z.string().url();
+// Accepts either a fully qualified http(s) URL or a site-relative path
+// like `/about` or `/learn/foo`. The relative form is useful for linking
+// author bylines to in-site pages without hard-coding the production origin.
+const url = z.string().refine(
+  (s) => /^https?:\/\//.test(s) || s.startsWith('/'),
+  { message: 'Must be an absolute http(s) URL or a site-relative path starting with "/"' },
+);
 
 // [Phase 5] Carrier/product lifecycle status. Required on every
 // review MDX. Mirrors data-pipeline/schemas/carrier.ts CarrierStatusSchema.
