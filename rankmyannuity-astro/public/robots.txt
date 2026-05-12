@@ -1,4 +1,18 @@
-# Sitemap
+# RankMyAnnuity.pro robots.txt
+# Allow all well-behaved crawlers full access to the public site.
+
+User-agent: *
+Allow: /
+
+# Explicitly allow Googlebot and AdSense crawler
+User-agent: Googlebot
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+# Sitemap location
 Sitemap: https://rankmyannuity.pro/sitemap-index.xml
-
-

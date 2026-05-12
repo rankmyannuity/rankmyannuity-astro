@@ -31,23 +31,21 @@ const fia: Carrier[] = [
     name: "Athene",
     note: "Apollo-owned. #1 FIA seller. Competitive rates, PE ownership risk.",
     strength: "A",
-    slug: "athene",
     products: [
       { grade: "C", score: 66, pct: 49, name: "AccuMax", angle: "Accumulation FIA", term: "7-10yr" },
       { grade: "F", score: 63, pct: 10, name: "Accumulator", angle: "Accumulation + optional income", term: "7-10yr" },
       { grade: "A", score: 68, pct: 87, name: "Agility", angle: "Shorter commitment", term: "5-7yr" },
       { grade: "D", score: 64, pct: 34, name: "Ascent Pro", angle: "Premium bonus", term: "10-14yr" },
-      { grade: "F", score: 63, pct: 7, name: "Performance Elite", angle: "Income-focused", term: "10yr", slug: "athene-performance-elite" },
+      { grade: "F", score: 63, pct: 7, name: "Performance Elite", angle: "Income-focused", term: "10yr" },
     ],
   },
   {
     name: "Allianz",
     note: "Largest FIA seller by volume. Proprietary Bloomberg indexes. Not PE-owned.",
     strength: "A+",
-    slug: "allianz-life",
     products: [
       { grade: "D", score: 64, pct: 31, name: "222 Annuity", angle: "Bonus + income combined", term: "10yr" },
-      { grade: "D", score: 64, pct: 28, name: "Benefit Control", angle: "Flexible income", term: "10yr", slug: "allianz-benefit-control" },
+      { grade: "D", score: 64, pct: 28, name: "Benefit Control", angle: "Flexible income", term: "10yr" },
       { grade: "B", score: 67, pct: 78, name: "Core Income 7", angle: "Income-focused", term: "7yr" },
       { grade: "B", score: 67, pct: 75, name: "360 Annuity", angle: "Multi-index accumulation", term: "10yr" },
       { grade: "A", score: 69, pct: 96, name: "Accumulator Advantage 7", angle: "Pure accumulation", term: "7yr" },
@@ -57,9 +55,8 @@ const fia: Carrier[] = [
     name: "Corebridge Financial",
     note: "Formerly AIG. Now Brookfield-owned (PE). Strong legacy book.",
     strength: "A+",
-    slug: "corebridge-financial",
     products: [
-      { grade: "C", score: 66, pct: 60, name: "American Pathway", angle: "Core accumulation FIA", term: "10yr", slug: "corebridge-american-pathway" },
+      { grade: "C", score: 66, pct: 60, name: "American Pathway", angle: "Core accumulation FIA", term: "10yr" },
       { grade: "C", score: 66, pct: 57, name: "American Pathway Pro", angle: "Enhanced with bonus", term: "10yr" },
       { grade: "C", score: 66, pct: 54, name: "American Custom", angle: "Customizable index allocation", term: "7-10yr" },
     ],
@@ -88,11 +85,10 @@ const fia: Carrier[] = [
     name: "Nationwide",
     note: "Mutual company. NOT PE-owned. Strong in both FIA and VA markets.",
     strength: "A+",
-    slug: "nationwide",
     products: [
       { grade: "D", score: 64, pct: 22, name: "New Heights (FIA)", angle: "Competitive caps + optional income", term: "10yr" },
       { grade: "A", score: 69, pct: 93, name: "Defined Protection (FIA)", angle: "Conservative accumulation", term: "7yr" },
-      { grade: "B", score: 67, pct: 66, name: "Peak 10 (FIA)", angle: "Premium bonus from mutual carrier", term: "10yr", slug: "nationwide-peak-10" },
+      { grade: "B", score: 67, pct: 66, name: "Peak 10 (FIA)", angle: "Premium bonus from mutual carrier", term: "10yr" },
     ],
   },
   {
@@ -137,9 +133,8 @@ const fia: Carrier[] = [
     name: "MassMutual",
     note: "Highest possible AM Best rating. Mutual company. 170+ years. Broad product range.",
     strength: "A++",
-    slug: "massmutual",
     products: [
-      { grade: "A", score: 70, pct: 99, name: "Stable Voyage (MYGA)", angle: "Fixed deferred, watch renewal rates", term: "3-5yr", slug: "massmutual-stable-voyage" },
+      { grade: "A", score: 70, pct: 99, name: "Stable Voyage (MYGA)", angle: "Fixed deferred, watch renewal rates", term: "3-5yr" },
       { grade: "A", score: 68, pct: 90, name: "Index Summit (FIA)", angle: "FIA with 50% buffer — unique hybrid", term: "6yr" },
     ],
   },
@@ -158,7 +153,6 @@ const va: Carrier[] = [
     name: "Jackson National",
     note: "#1 VA seller for 27+ consecutive quarters. Independent.",
     strength: "A",
-    slug: "jackson-national",
     products: [
       { grade: "F", score: 54, pct: 16, name: "Perspective II", angle: "#1 selling VA in the US", term: "7yr" },
       { grade: "F", score: 54, pct: 9, name: "Elite Access", angle: "Alternative investment subaccounts", term: "7yr" },
@@ -169,9 +163,8 @@ const va: Carrier[] = [
     name: "Equitable",
     note: "Formerly AXA. #1 in structured/RILA annuities.",
     strength: "A+",
-    slug: "equitable-financial",
     products: [
-      { grade: "B", score: 54, pct: 92, name: "Structured Capital Strategies (RILA)", angle: "#1 selling structured annuity", term: "6yr", slug: "equitable-structured-capital-strategies" },
+      { grade: "B", score: 54, pct: 92, name: "Structured Capital Strategies (RILA)", angle: "#1 selling structured annuity", term: "6yr" },
       { grade: "B", score: 55, pct: 66, name: "Retirement Cornerstone (VA)", angle: "Traditional VA with GLWB", term: "7yr" },
     ],
   },
@@ -179,7 +172,6 @@ const va: Carrier[] = [
     name: "Lincoln Financial",
     note: "Major multi-line insurer. Strong in both traditional VA and RILA.",
     strength: "A+",
-    slug: "lincoln-financial",
     products: [
       { grade: "B", score: 54, pct: 75, name: "Level Advantage (RILA)", angle: "Buffer annuity, 10-20% protection", term: "6yr" },
       { grade: "C", score: 55, pct: 59, name: "ChoicePlus Assurance (VA)", angle: "Traditional VA with rider options", term: "7yr" },
@@ -208,9 +200,8 @@ const va: Carrier[] = [
     name: "Prudential",
     note: "Shifting from traditional VA toward RILA/buffer products.",
     strength: "A+",
-    slug: "prudential",
     products: [
-      { grade: "C", score: 54, pct: 58, name: "FlexGuard (RILA)", angle: "Buffer annuity, A+ carrier", term: "6yr", slug: "prudential-flexguard" },
+      { grade: "C", score: 54, pct: 58, name: "FlexGuard (RILA)", angle: "Buffer annuity, A+ carrier", term: "6yr" },
       { grade: "C", score: 55, pct: 41, name: "Defined Income (VA)", angle: "Traditional VA with GLWB", term: "7yr" },
     ],
   },
@@ -218,7 +209,6 @@ const va: Carrier[] = [
     name: "Pacific Life",
     note: "Mutual holding company. NOT PE-owned. Strong in both VA and FIA.",
     strength: "A+",
-    slug: "pacific-life",
     products: [
       { grade: "D", score: 55, pct: 34, name: "Pacific Odyssey (VA)", angle: "Flexible VA with strong subaccounts", term: "7yr" },
       { grade: "B", score: 59, pct: 84, name: "Pacific Choice (VA)", angle: "Fee-based advisory VA", term: "None" },
@@ -276,9 +266,11 @@ function renderCarrierCard(c: Carrier): string {
       const rowClass = p.slug ? "rma-product-row rma-product-row--linked" : "rma-product-row";
       const cursor = p.slug ? "cursor:pointer;" : "";
       const borderTop = idx > 0 ? "border-top:1px solid rgb(226,232,240);" : "";
-      const trailing = p.slug
-        ? `<span style="font-size:12px;color:rgb(100,116,139);flex-shrink:0;margin-left:12px;">${esc(p.term)}</span>`
-        : `<span style="display:inline-flex;align-items:center;gap:8px;flex-shrink:0;margin-left:12px;"><span style="font-size:11px;color:rgb(100,116,139);text-transform:uppercase;letter-spacing:0.04em;padding:2px 6px;border:1px solid rgb(226,232,240);border-radius:4px;background:rgb(248,250,252);">Coming soon</span><span style="font-size:12px;color:rgb(100,116,139);">${esc(p.term)}</span></span>`;
+      // Trailing column shows the surrender term. Linked rows and unlinked rows
+      // render identically; the link cue is the row’s hover state and chevron-free
+      // anchor styling. This keeps the listing reading as a roster of grades rather
+      // than as a placeholder catalog when only some products have full reviews.
+      const trailing = `<span style="font-size:12px;color:rgb(100,116,139);flex-shrink:0;margin-left:12px;">${esc(p.term)}</span>`;
 
       return `
       <${tag}${href} style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;text-decoration:none;color:inherit;transition:background-color .15s;${cursor}${borderTop}" class="${rowClass}">

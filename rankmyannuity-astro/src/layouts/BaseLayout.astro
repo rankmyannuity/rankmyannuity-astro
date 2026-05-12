@@ -7,15 +7,19 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
 }
 
 const {
   title = "RankMyAnnuity.pro — Independent Annuity Grades, Rates & Reviews",
   description = "Independent annuity grading, rate data, and product reviews built for shoppers and advisors.",
   ogImage = "/og-default.png",
+  canonicalPath,
+  noindex = false,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const canonicalURL = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url).toString();
 ---
 
 <!doctype html>
@@ -28,6 +32,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toStri
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -44,6 +49,58 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toStri
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Funding Choices CMP (must load BEFORE AdSense per Google policy) -->
+    <script
+      async
+      src="https://fundingchoicesmessages.google.com/i/pub-8186257439604680?ers=1"
+      nonce="funding-choices"
+    ></script>
+    <script nonce="funding-choices">
+      (function() {
+        function signalGooglefcPresent() {
+          if (!window.frames['googlefcPresent']) {
+            if (document.body) {
+              const iframe = document.createElement('iframe');
+              iframe.style =
+                'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px;';
+              iframe.style.display = 'none';
+              iframe.name = 'googlefcPresent';
+              document.body.appendChild(iframe);
+            } else {
+              setTimeout(signalGooglefcPresent, 0);
+            }
+          }
+        }
+        signalGooglefcPresent();
+      })();
+    </script>
+
+    <!-- Google AdSense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8186257439604680"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Google Analytics 4 (property 532575210) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-14352117730"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Default consent state — Funding Choices CMP will update this once the
+      // visitor responds to the GDPR/CCPA prompt. Denied-by-default keeps us
+      // compliant in EEA/UK/CH until consent is recorded.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+      gtag('config', 'G-14352117730', { anonymize_ip: true });
+    </script>
 
     <!-- Fonts: DM Serif Display (headings) + DM Sans (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

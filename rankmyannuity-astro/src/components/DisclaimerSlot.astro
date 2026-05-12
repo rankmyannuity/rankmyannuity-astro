@@ -1,17 +1,17 @@
 ---
-// Phase 2 placeholder disclaimer. Every article and review renders one of
-// these so the slot is visible in crawled HTML. Final copy lands in the
-// trust-page phase (Phase 2.5 of the migration map) and replaces this file.
+// Standardized disclosure slot rendered on every article and review page.
+// Variants tailor the second sentence to the page type; the first sentence is
+// constant across the site so the legal posture is consistent.
 export interface Props {
   variant?: 'general' | 'yield' | 'ranking' | 'product' | 'carrier';
 }
 const { variant = 'general' } = Astro.props;
-const label: Record<string, string> = {
-  general: 'Educational content — not personalized advice.',
-  yield:   'Rate snapshots can change; see methodology.',
-  ranking: 'Rankings derived from documented IRR methodology.',
-  product: 'Features summarized from issuer materials at the time of writing.',
-  carrier: 'Financial-strength ratings change; see methodology.',
+const detail: Record<string, string> = {
+  general: 'Educational content — not personalized investment, tax, or legal advice.',
+  yield:   'Rate snapshots can change between updates; see our methodology page for cadence.',
+  ranking: 'Rankings are derived from our documented IRR methodology and are recomputed on the cadence described on the methodology page.',
+  product: 'Product features are summarized from issuer materials available at the time of writing and may change without notice.',
+  carrier: 'Carrier financial-strength ratings change over time; verify with the rating agency before making a decision.',
 };
 ---
 <aside
@@ -19,6 +19,9 @@ const label: Record<string, string> = {
   data-disclaimer={variant}
   class="my-6 border-l-2 border-[var(--rule)] pl-4 text-sm text-[var(--muted)]"
 >
-  <strong>Disclosure.</strong> {label[variant]}
-  <span class="block mt-1 text-xs">Final copy lands in the trust-page phase.</span>
+  <strong>Disclosure.</strong> RankMyAnnuity.pro provides independent, educational
+  information. We are not a licensed financial, tax, or legal advisor and we do not
+  sell annuities. Always consult a licensed professional before making annuity
+  purchasing decisions.
+  <span class="block mt-1">{detail[variant]}</span>
 </aside>
