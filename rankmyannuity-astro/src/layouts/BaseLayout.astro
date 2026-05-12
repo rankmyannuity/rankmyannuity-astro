@@ -83,6 +83,25 @@ const canonicalURL = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? 
       crossorigin="anonymous"
     ></script>
 
+    <!-- Google Analytics 4 (property 532575210) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-14352117730"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Default consent state — Funding Choices CMP will update this once the
+      // visitor responds to the GDPR/CCPA prompt. Denied-by-default keeps us
+      // compliant in EEA/UK/CH until consent is recorded.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+      gtag('config', 'G-14352117730', { anonymize_ip: true });
+    </script>
+
     <!-- Fonts: DM Serif Display (headings) + DM Sans (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
