@@ -7,15 +7,19 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
 }
 
 const {
   title = "RankMyAnnuity.pro — Independent Annuity Grades, Rates & Reviews",
   description = "Independent annuity grading, rate data, and product reviews built for shoppers and advisors.",
   ogImage = "/og-default.png",
+  canonicalPath,
+  noindex = false,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const canonicalURL = new URL(canonicalPath ?? Astro.url.pathname, Astro.site ?? Astro.url).toString();
 ---
 
 <!doctype html>
@@ -28,6 +32,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toStri
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
